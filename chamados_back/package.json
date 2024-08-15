@@ -4,18 +4,25 @@
   "description": "backend chamados",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/server.ts",
+    "dev": "nodemon --watch \"./src/**\" ./src/server.ts",
     "build": "tsc"
   },
   "author": "Gustavo Silva",
   "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "nodemon": "^3.1.4",
+    "sequelize-cli": "^6.6.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "@sequelize/mysql": "^7.0.0-alpha.41",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mysql2": "^3.11.0",
+    "sequelize": "^6.37.3"
   }
 }

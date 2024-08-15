@@ -1,18 +1,6 @@
-import express from 'express'
+import app from "./app";
+import "dotenv";
 
-import { Router, Request, Response } from 'express';
+const PORT = process.env.PORT || 3001;
 
-const app = express();
-
-const route = Router()
-
-app.use(express.json())
-
-route.get('/', (req: Request, res: Response) => {
-  res.json({ message: 'API CHAMADOS' })
-})
-
-app.use(route)
-
-
-app.listen(3333, () => 'server running on port 3333')
+app.listen(PORT, () => `server running on port ${PORT}`);
