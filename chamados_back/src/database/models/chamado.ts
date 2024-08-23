@@ -6,21 +6,22 @@ import Status from "./status";
 import Atendimento from "./atendimento";
 import User from "./user";
 import ChamadoSistemaInterno from "./chamadoSistemaInterno";
+import IChamado from "../../interfaces/chamado";
 
-class Chamado extends Model {
-  declare idChamado: number;
+class Chamado extends Model implements IChamado{
+  declare idChamado?: number;
   declare dataCriacao: string;
   declare nomeSolicitante: string;
   declare usuario: string;
-  declare observacao: string;
-  declare email: string;
-  declare observacaoInterna: string;
+  declare observacao?: string;
+  declare email?: string;
+  declare observacaoInterna?: string;
   declare origensIdOrigem: number;
   declare setoresIdSetor: number;
   declare statusIdStatus: number;
   declare atendimentosIdAtendimento: number;
-  declare usersIdUsers: number;
-  declare chamadosSistemasInternosIdChamadoSistemaInterno: number;
+  declare usersIdUsers?: number;
+  declare chamadosSistemasInternosIdChamadoSistemaInterno?: number;
 }
 
 Chamado.init(
