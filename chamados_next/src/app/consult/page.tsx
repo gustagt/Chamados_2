@@ -1,4 +1,5 @@
-import { ButtonOne, ButtonTwo } from "@/components/buttons";
+
+import { ButtonPrimary } from "@/components/buttons/ButtonPrimary";
 import { CardChamado } from "@/components/card";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,7 +21,7 @@ export default function Page() {
               className="outline outline-1 outlineu-black rounded-sm h-8 px-2 "
             />
             <div className="flex mt-4 justify-between gap-3">
-              <ButtonOne text="Consultar Chamado"></ButtonOne>
+              <ButtonPrimary text="Consultar Chamado"></ButtonPrimary>
             </div>
 
             <span className="flex text-sm text-zinc-500 mt-2 gap-2 ">

@@ -1,45 +1,41 @@
 "use client";
-import { ButtonOne, ButtonTwo } from "@/components/buttons";
+
 import { CardChamado } from "@/components/card";
-import  {signIn} from 'next-auth/react'
+import { signIn } from "next-auth/react";
 
 import { SyntheticEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-
+import { ButtonPrimary } from "@/components/buttons/ButtonPrimary";
+import { LinkPrimary } from "@/components/links/LinkPrimary";
 
 export default function Page() {
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-  const [username, setUsername] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
+  const router = useRouter();
 
-  const router = useRouter()
-  
-  
-  async function handleSubmit(event: SyntheticEvent){
-    event.preventDefault()
+  async function handleSubmit(event: SyntheticEvent) {
+    event.preventDefault();
 
-    const result = await signIn('credentials',{
+    const result = await signIn("credentials", {
       username,
       password,
-      redirect: false
-    })
+      redirect: false,
+    });
 
-    if(result?.error){
-      console.log(result)
-      return 
+    if (result?.error) {
+      console.log(result);
+      return;
     }
 
-    router.replace('/chamados')
-
-
+    router.replace("/chamados");
   }
-  
 
   return (
     <div className="grid gap-2 grid-cols-2 m-4 h-[96vh]">
       <CardChamado />
       <div className="flex justify-center items-center">
-        <form className="flex flex-col w-1/3 min-w-60" onSubmit={handleSubmit}>
+        <form className="flex flex-col  w-2/5 min-w-60" onSubmit={handleSubmit}>
           <label htmlFor="username" className="font-semibold">
             Usuário:
           </label>
@@ -50,7 +46,6 @@ export default function Page() {
             className="outline outline-1 outlineu-black rounded-sm h-8 px-2 mb-2 "
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-          
             maxLength={45}
           />
           <label htmlFor="password" className="font-semibold">
@@ -65,13 +60,12 @@ export default function Page() {
             onChange={(e) => setPassword(e.target.value)}
             maxLength={45}
           />
-          <div className="flex mt-7 justify-between gap-3">
-            <ButtonOne text="Entrar"></ButtonOne>
-            <ButtonTwo text="Consultar Chamado"></ButtonTwo>
+          <div className="flex mt-7 justify-between gap-3 flex-wrap 2xl:flex-nowrap ">
+            <ButtonPrimary text="Entrar"></ButtonPrimary>
+            <LinkPrimary path="/consult" text="Consultar Chamado"></LinkPrimary>
           </div>
         </form>
       </div>
     </div>
   );
 }
-
