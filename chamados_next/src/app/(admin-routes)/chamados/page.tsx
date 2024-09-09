@@ -1,12 +1,16 @@
-"use client";
+
 
 import { CardChamado } from "@/components/card";
 import Image from "next/image";
 import Link from "next/link";
+import { getServerSession } from 'next-auth';
+import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export default function Page() {
+export default async function Page() {
+  const session = await getServerSession(nextAuthOptions)
   return (
     <div className="grid gap-2 grid-cols-2 m-4 h-[96vh]">
+   
       <div className="flex flex-col items-center gap-32">
         <div className="self-start p-4  text-center">
           <Image
