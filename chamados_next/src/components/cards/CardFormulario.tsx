@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import IconLinkNav from "../links/IconLinkNav";
 
-
 export default function CardFormulario({ type }: CardProps) {
   let text;
   let icon;
@@ -50,7 +49,11 @@ export default function CardFormulario({ type }: CardProps) {
     <div className="bg-teclado bg-cover h-full rounded">
       <div className="bg-black-90 h-full flex flex-col items-center rounded text-white gap-24">
         <div className="grid grid-cols-4 w-full text-center">
-          <IconLinkNav pathIcon="/icons/back-w.svg" altIcon="Voltar" pathLink="/chamados/informatica"/>
+          <IconLinkNav
+            pathIcon="/icons/back-w.svg"
+            altIcon="Voltar"
+            pathLink="/chamados/informatica"
+          />
           <h2 className="col-start-2 col-span-2 text-3xl  pt-16">
             Dados do chamado
           </h2>
@@ -147,13 +150,14 @@ export default function CardFormulario({ type }: CardProps) {
               <li> Etc;</li>
             </ul>
           </div>
-        )}    {type === 8 && (
+        )}{" "}
+        {type === 8 && (
           <div>
-            <span> Problemas físicos relacionado ao Telefone, como:</span>
+            <span>Problemas relacionados ao Usuário, como:</span>
             <ul className="list-disc list-inside p-3">
-              <li> Telefone não efetua chamada;</li>
-              <li> Telefone sem rede;</li>
-              <li> Mudança de nome do ramal;</li>
+              <li> Troca de Senha;</li>
+              <li> Esquecimento de Pin;</li>
+              <li> Acesso de pastas na rede;</li>
               <li> Etc;</li>
             </ul>
           </div>
