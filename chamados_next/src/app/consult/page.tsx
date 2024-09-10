@@ -1,13 +1,13 @@
+import  ButtonPrimary  from "@/components/buttons/ButtonPrimary";
+import  CardChamadoOne  from "@/components/cards/CardChamadoOne";
 
-import { ButtonPrimary } from "@/components/buttons/ButtonPrimary";
-import { CardChamado } from "@/components/card";
 import Image from "next/image";
-import Link from "next/link";
+
 
 export default function Page() {
   return (
     <div className="grid gap-2 grid-cols-2 m-4 h-[96vh]">
-      <CardChamado side="left" />
+      <CardChamadoOne back={true} />
       <div className="grid grid-rows-5 ">
         <div></div>
 

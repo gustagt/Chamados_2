@@ -1,5 +1,4 @@
-import { ButtonTwo } from "@/components/buttons";
-import { CardChamado, CardFormulario } from "@/components/card";
+import CardFormulario from "@/components/cards/CardFormulario";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,7 +7,7 @@ export default function Page({ params }: { params: { type: number } }) {
 
   return (
     <div className="grid gap-2 grid-cols-2 m-4 h-[96vh]">
-      <CardFormulario type={type}></CardFormulario>
+      <CardFormulario type={type} />
       <form className="flex flex-col items-center h-full gap-16">
         <div className="grid grid-cols-4 w-full text-center">
           <h2 className="col-start-2 col-span-2 text-3xl  pt-16">
@@ -121,8 +120,14 @@ export default function Page({ params }: { params: { type: number } }) {
         ) : (
           <div className="flex flex-col gap-3 font-medium w-2/3">
             <span className="flex text-sm font-normal text-red-500">
-              <Image src="/icons/alert.svg" alt="exluir" width={16} height={12} />A
-              criação de usuários deve ser realizada pelo responsável do setor!
+              <Image
+                src="/icons/alert.svg"
+                alt="exluir"
+                width={16}
+                height={12}
+              />
+              A criação de usuários deve ser realizada pelo responsável do
+              setor!
             </span>
             <label htmlFor="" className="flex flex-col ">
               Nome:
@@ -215,9 +220,7 @@ export default function Page({ params }: { params: { type: number } }) {
           </div>
         )}
         <div className="flex w-2/3 justify-end">
-          <div className=" w-1/3 min-w-24 ">
-            <ButtonTwo text="Enviar" />
-          </div>
+          <div className=" w-1/3 min-w-24 ">botao</div>
         </div>
       </form>
     </div>

@@ -1,12 +1,11 @@
 "use client";
-
-import { CardChamado } from "@/components/card";
 import { signIn } from "next-auth/react";
 
 import { SyntheticEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ButtonPrimary } from "@/components/buttons/ButtonPrimary";
-import { LinkPrimary } from "@/components/links/LinkPrimary";
+import  ButtonPrimary  from "@/components/buttons/ButtonPrimary";
+import  LinkPrimary  from "@/components/links/LinkPrimary";
+import  CardChamadoOne  from "@/components/cards/CardChamadoOne";
 
 export default function Page() {
   const [username, setUsername] = useState<string>("");
@@ -33,7 +32,7 @@ export default function Page() {
 
   return (
     <div className="grid gap-2 grid-cols-2 m-4 h-[96vh]">
-      <CardChamado />
+      <CardChamadoOne />
       <div className="flex justify-center items-center">
         <form className="flex flex-col  w-2/5 min-w-60" onSubmit={handleSubmit}>
           <label htmlFor="username" className="font-semibold">
