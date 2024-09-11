@@ -1,5 +1,5 @@
 import { ModelStatic } from "sequelize";
-import resp from "../utils/resp";
+import {resp} from "../utils/resp";
 import Solicitante from "../database/models/solicitante";
 
 class SolicitanteService {

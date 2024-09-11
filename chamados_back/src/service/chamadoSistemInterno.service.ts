@@ -1,5 +1,5 @@
 import { ModelStatic } from "sequelize";
-import resp from "../utils/resp";
+import {resp} from "../utils/resp";
 import ChamadoSistemaInterno from "../database/models/chamadoSistemaInterno";
 
 class ChamadoSistemaInternoService {

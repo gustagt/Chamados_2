@@ -1,5 +1,5 @@
 import { ModelStatic } from "sequelize";
-import resp from "../utils/resp";
+import {resp} from "../utils/resp";
 import Status from './../database/models/status';
 
 class StatusService {

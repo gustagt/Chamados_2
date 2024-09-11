@@ -1,6 +1,6 @@
 import { ModelStatic } from "sequelize";
 import Acesso from "../database/models/acesso";
-import resp from "../utils/resp";
+import {resp} from "../utils/resp";
 
 class AcessoService {
     private model : ModelStatic<Acesso> = Acesso;

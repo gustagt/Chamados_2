@@ -1,5 +1,5 @@
 import { ModelStatic, Optional } from "sequelize";
-import resp from "../utils/resp";
+import {resp} from "../utils/resp";
 import Chamado from "../database/models/chamado";
 import IChamado from "./../interfaces/chamado";
 

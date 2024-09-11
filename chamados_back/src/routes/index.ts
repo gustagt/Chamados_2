@@ -11,6 +11,7 @@ import statusRouter from "./status.router";
 import tipoContratacaoRouter from "./tipoContratacao.router";
 import userRouter from "./user.router";
 import userHasAcessoRouter from "./userHasAcesso.router";
+import loginRouter from "./login.router";
 
 const router = Router()
 
@@ -26,5 +27,6 @@ router.use(statusRouter)
 router.use(tipoContratacaoRouter)
 router.use(userRouter)
 router.use(userHasAcessoRouter)
+router.use(loginRouter)
 
 export default router

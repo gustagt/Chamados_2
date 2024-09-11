@@ -1,5 +1,5 @@
 import { ModelStatic } from "sequelize";
-import resp from "../utils/resp";
+import {resp} from "../utils/resp";
 import Origem from "../database/models/origem";
 
 class OrigemService {

@@ -5,15 +5,19 @@ import ChamadoSistemaInternoService from "../service/chamadoSistemInterno.servic
 import UserService from "../service/user.service";
 import SolicitanteService from "../service/solicitante.service";
 import Chamado from "../database/models/chamado";
-import { authenticateUser } from "../ldap/config";
+import { respE } from "../utils/resp";
+
+
 
 class ChamadoController {
   private service = new ChamadoService();
   private serviceSi = new ChamadoSistemaInternoService();
   private serviceUser = new UserService();
   private serviceSolicitante = new SolicitanteService();
+  
 
-  async getAll(_req: Request, res: Response, next: NextFunction) {
+
+    async getAll(_req: Request, res: Response, next: NextFunction) {
     try {
       const { status, message } = await this.service.getAll();
       res.status(status).json(message);
@@ -48,7 +52,7 @@ class ChamadoController {
 
         res.status(status).json(message);
       } else {
-        res.status(404).json({ message: "Usuário não encontrado" });
+        res.status(404).json(respE("Usuário não encontrado" ));
       }
     } catch (error) {
       next(error);
@@ -62,7 +66,7 @@ class ChamadoController {
         const { status, message } = await this.service.delete(chamado);
         res.status(status).json(message);
       } else {
-        res.status(404).json({ message: "Usuário não encontrado" });
+        res.status(404).json(respE("Usuário não encontrado"));
       }
     } catch (error) {
       next(error);
