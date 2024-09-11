@@ -1,4 +1,4 @@
-import { api } from "@/app/lib/utils/config";
+import { api } from "@/lib/utils/config";
 import NextAuth, { NextAuthOptions } from "next-auth"
 import  CredentialsProvider  from 'next-auth/providers/credentials';
 
@@ -31,7 +31,7 @@ const nextAuthOptions: NextAuthOptions ={
         })
       ],
     pages: {
-        signIn: '/login '
+        signIn: '/login'
     },
     callbacks:{
         async jwt({token, user}){

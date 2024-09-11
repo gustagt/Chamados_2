@@ -1,9 +1,28 @@
+'use client'
 import CardFormulario from "@/components/cards/CardFormulario";
+import { useAppSelector, useAppStore } from "@/lib/hooks/redux";
+import { getSetores } from "@/lib/slices/setor.slice";
 import Image from "next/image";
 import Link from "next/link";
+import { useRef } from "react";
+import session from './../../../../../../node_modules/next-auth/core/routes/session.d';
+import { useSession } from "next-auth/react";
 
 export default function Page({ params }: { params: { type: number } }) {
   const type = Number(params.type);
+  const {data: session} = useSession()
+
+  const store = useAppStore()
+  const initialized = useRef(false)
+
+  if(!initialized.current){
+    store.dispatch(getSetores(session?.user.token))
+    initialized.current = true
+  }
+
+  const setores = useAppSelector((state) => state.setorState.setores)
+
+  
 
   return (
     <div className="grid gap-2 grid-cols-2 m-4 h-[96vh]">
@@ -36,14 +55,16 @@ export default function Page({ params }: { params: { type: number } }) {
             <label htmlFor="" className="flex flex-col">
               Setor:
               <select
-                name="cars"
-                id="cars"
+                name="setores"
+                id="setores"
                 className="outline outline-1 outlineu-black rounded-sm px-2 h-8"
               >
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="mercedes">Mercedes</option>
-                <option value="audi">Audi</option>
+                <option></option>
+                {setores && setores.map((setor: {idSetor:number, setor:string})=>(
+               
+                  <option key={setor.idSetor} value={setor.idSetor}>{setor.setor}</option>          
+                ))}
+                
               </select>
             </label>
             {type === 5 && (

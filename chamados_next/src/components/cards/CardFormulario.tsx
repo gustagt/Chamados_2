@@ -150,7 +150,7 @@ export default function CardFormulario({ type }: CardProps) {
               <li> Etc;</li>
             </ul>
           </div>
-        )}{" "}
+        )}
         {type === 8 && (
           <div>
             <span>Problemas relacionados ao Usuário, como:</span>

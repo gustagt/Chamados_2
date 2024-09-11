@@ -1,10 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
+import setorReducer from './slices/setor.slice'
 
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      
+      setorState: setorReducer
     },
   })
 }
