@@ -5,7 +5,7 @@ export default function IconLinkMenu({pathIcon, altIcon, pathLink, text}:IconLin
     return (<div className="flex justify-center content-center ">
         <Link href={pathLink} className="p-3 flex flex-col gap-3 justify-between">
           <Image
-          className="self-center h-[100px]"
+          className="self-center min-w-24 h-[100px]"
             src={pathIcon}
             alt={altIcon}
             width={100}

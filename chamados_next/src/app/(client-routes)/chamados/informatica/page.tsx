@@ -13,14 +13,14 @@ export default function Page() {
         <div className="bg-black-90 h-full flex flex-col gap-8 rounded text-white">
           <div className="flex justify-between text-center">
             <IconLinkNav pathIcon="/icons/back-w.svg" altIcon="Voltar" pathLink="/chamados"/>
-            <ButtonLogout />
+            <ButtonLogout pathIcon="/icons/logout-w.svg"/>
           </div>
           <div>
             <h2 className="text-4xl font-medium text-white text-center p-4">
               Selecione o tipo de chamado
             </h2>
           </div>
-          <div className="grid grid-cols-3 auto-cols-auto w-1/2 gap-10 justify-center self-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-cols-auto w-1/2 gap-10 justify-center self-center">
             <IconLinkMenu pathLink="/chamados/informatica/1" pathIcon="/icons/Workstation-white.svg" altIcon="chamado relacionado a computador" text="Computador"/>
             <IconLinkMenu pathLink="/chamados/informatica/2" pathIcon="/icons/sistem.svg" altIcon="chamado relacionado a sistema" text="Sistema"/>
             <IconLinkMenu pathLink="/chamados/informatica/3" pathIcon="/icons/create-user.svg" altIcon="chamado para criar usuario" text="Criação de usuario"/>

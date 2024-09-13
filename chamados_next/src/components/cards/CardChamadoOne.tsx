@@ -14,10 +14,11 @@ export default function CardChamadoOne({ back, logout }: CardChamadoProps) {
           />
         )}
 
-        {logout && <ButtonLogout />}
+        {logout && <ButtonLogout pathIcon="/icons/logout-w.svg" />}
 
-        <div className="flex flex-wrap basis-3/4 row-start-3 justify-self-center items-center ">
+        <div className="flex flex-wrap md:flex-nowrap basis-full row-start-3 justify-self-center  justify-center md:justify-normal items-center gap-2 ">
           <Image
+          className="w-1/4 "
             src="/images/logoTranscon.png"
             alt="TransCon Logo"
             width={95}

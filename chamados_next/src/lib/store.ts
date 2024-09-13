@@ -1,11 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit'
 import setorReducer from './slices/setor.slice'
+import atendimentoReducer from './slices/atendimento.slice'
+import sistemaReducer from './slices/sistema.slice'
+import acessoReducer from './slices/acesso.slice'
+
 
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      setorState: setorReducer
+      setorState: setorReducer,
+      atendimentoState: atendimentoReducer,
+      sistemaState: sistemaReducer,
+      acessoState: acessoReducer,
     },
   })
 }

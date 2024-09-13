@@ -31,7 +31,7 @@ export default function Page() {
   }
 
   return (
-    <div className="grid gap-2 grid-cols-2 m-4 h-[96vh]">
+    <div className="grid gap-2 grid-rows-2 grid-cols-none md:grid-cols-2 md:grid-rows-none m-4 h-[96vh]">
       <CardChamadoOne />
       <div className="flex justify-center items-center">
         <form className="flex flex-col  w-2/5 min-w-60" onSubmit={handleSubmit}>

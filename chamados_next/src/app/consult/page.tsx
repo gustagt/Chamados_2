@@ -6,19 +6,20 @@ import Image from "next/image";
 
 export default function Page() {
   return (
-    <div className="grid gap-2 grid-cols-2 m-4 h-[96vh]">
+    <div className="grid gap-2 grid-rows-2 grid-cols-none md:grid-cols-2 md:grid-rows-none m-4 h-[96vh]">
       <CardChamadoOne back={true} />
       <div className="grid grid-rows-5 ">
         <div></div>
 
-        <div className="row-span-3 flex justify-center items-center">
-          <div className="flex flex-col w-1/3 min-w-40">
+        <form className="row-span-3 flex justify-center items-center">
+          <div className="flex flex-col  w-2/3 md:w-1/3 min-w-40">
             <label htmlFor="" className="font-semibold">
               Protocolo:
             </label>
             <input
               type="text"
               className="outline outline-1 outlineu-black rounded-sm h-8 px-2 "
+              required
             />
             <div className="flex mt-4 justify-between gap-3">
               <ButtonPrimary text="Consultar Chamado"></ButtonPrimary>
@@ -35,7 +36,7 @@ export default function Page() {
               Digite o protocolo passado quando o chamado foi fechado.
             </span>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

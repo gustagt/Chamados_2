@@ -4,7 +4,7 @@ import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-export default function ButtonLogout() {
+export default function ButtonLogout({pathIcon, className}: ButtonLogoutProps) {
   const router = useRouter();
   async function logout() {
     await signOut({
@@ -15,10 +15,10 @@ export default function ButtonLogout() {
   }
 
   return (
-    <div className="self-start justify-self-end p-4 text-center hover:cursor-pointer" onClick={logout}>
+    <div className={`self-start justify-self-end p-4 text-center hover:cursor-pointer ${className}`} onClick={logout}>
       <Image
-        src="/icons/logout-w.svg"
-        alt="Informatica Icone"
+        src={pathIcon}
+        alt="Logout"
         width={46}
         height={46}
       ></Image>
@@ -26,3 +26,8 @@ export default function ButtonLogout() {
     </div>
   );
 }
+
+type ButtonLogoutProps = {
+  pathIcon: string;
+  className?:string;
+};

@@ -1,57 +1,57 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import setorService from "../services/setor.service";
-import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
+import sistemaService from "../services/sistema.service";
+
 
 // First, create the thunk
-export const getSetores = createAsyncThunk(
-  "setor/getSetores",
+export const getSistemas = createAsyncThunk(
+  "sistema/getSistemas",
   async (token: string | undefined, thunkAPI) => {
-    const response = await setorService.getSetores(token);
+    const response = await sistemaService.getSistemas(token);
+
 
     return response;
   }
 );
 
-interface SetoresState {
-  setores: [];
+interface SistemasState {
+    sistemas: [];
   loading: "idle" | "pending" | "succeeded" | "failed";
 }
 
 const initialState = {
-  setores: [],
+  sistemas: [],
   loading: "idle",
-} satisfies SetoresState as SetoresState;
+} satisfies SistemasState as SistemasState;
 
 // Then, handle actions in your reducers:
-const setorSlice = createSlice({
-  name: "setor",
+const sistemaSlice = createSlice({
+  name: "sistemas",
   initialState,
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
     reset: (state) => {
-      state.setores = [];
+      state.sistemas = [];
       state.loading = "idle";
     },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(getSetores.fulfilled, (state, action) => {
+    builder.addCase(getSistemas.fulfilled, (state, action) => {
       // Add user to the state array
-      state.setores = action.payload;
+      state.sistemas = action.payload;
       state.loading = "succeeded";
     });
-    builder.addCase(getSetores.pending, (state, action) => {
+    builder.addCase(getSistemas.pending, (state, action) => {
       // Add user to the state array
-      state.setores = [];
+      state.sistemas = [];
       state.loading = "pending";
-    });builder.addCase(getSetores.rejected, (state, action) => {
+    });builder.addCase(getSistemas.rejected, (state, action) => {
       // Add user to the state array
-      state.setores = [];
+      state.sistemas = [];
       state.loading = "failed";
     });
   },
 });
 
-export const { reset } = setorSlice.actions;
-export default setorSlice.reducer;
+export const { reset } = sistemaSlice.actions;
+export default sistemaSlice.reducer;

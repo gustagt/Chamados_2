@@ -7,7 +7,7 @@ const getSetores = async (token?: string) => {
 
   try {
    
-    const res = await fetch(`${api}/setor`, config).then(
+    const res = await fetch(`${api}/setores`, config).then(
       (res) => res.json()
     );
 
