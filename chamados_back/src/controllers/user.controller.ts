@@ -6,7 +6,7 @@ import UserService from "../service/user.service";
 class UserController {
   private service = new UserService();
 
-  async getAll(req: Request, res: Response, next: NextFunction) {
+  async getAll(_req: Request, res: Response, next: NextFunction) {
     try {
         const {status, message} = await this.service.getAll()
         res.status(status).json(message)

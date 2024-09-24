@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import setorService from "../services/setor.service";
 import acessoService from "../services/acesso.service";
 
 

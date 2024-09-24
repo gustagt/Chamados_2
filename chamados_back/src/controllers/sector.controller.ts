@@ -1,9 +1,10 @@
+
 import { NextFunction, Request, Response } from "express";
 
-import StatusService from "../service/status.service";
+import SectorService from "../service/sector.service";
 
-class StatusController {
-  private service = new StatusService();
+class SectorController {
+  private service = new SectorService();
 
   async getAll(_req: Request, res: Response, next: NextFunction) {
     try {
@@ -16,4 +17,4 @@ class StatusController {
 }
 
 
-export default StatusController
+export default SectorController

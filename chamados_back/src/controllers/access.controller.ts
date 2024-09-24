@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "express";
+import AccessService from "../service/access.service";
 
-import StatusService from "../service/status.service";
-
-class StatusController {
-  private service = new StatusService();
+class AccessController {
+  private service = new AccessService();
 
   async getAll(_req: Request, res: Response, next: NextFunction) {
     try {
@@ -16,4 +15,4 @@ class StatusController {
 }
 
 
-export default StatusController
+export default AccessController

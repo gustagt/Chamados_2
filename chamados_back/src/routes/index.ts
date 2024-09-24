@@ -1,32 +1,34 @@
 import { Router } from "express";
-import acessoRouter from "./acesso.router";
-import atendimentoRouter from "./atendimento.router";
-import atendimentoSistemaRouter from "./atendimentoSistema.router";
-import chamadoRouter from "./chamado.router";
-import chamadoSistemaInternoRouter from "./chamadoSistemainterno.router";
-import origemRouter from "./origem.router";
-import setorRouter from "./setor.router";
-import solicitanteRouter from "./solicitante.router";
+import accessRouter from "./access.router";
+import serviceRouter from "./service.router";
+import systemRouter from "./system.router";
+import protocolRouter from "./protocol.router";
+import originRouter from "./origin.router";
+import sectorRouter from "./sector.router";
 import statusRouter from "./status.router";
-import tipoContratacaoRouter from "./tipoContratacao.router";
+import contractTypeRouter from "./contractType.router";
 import userRouter from "./user.router";
-import userHasAcessoRouter from "./userHasAcesso.router";
-import loginRouter from "./login.router";
+import userAccessRouter from "./userAccess.router";
+import loginRouter from "./auth.router";
+
+import AuthController from '../controllers/auth.controller';
+
+
 
 const router = Router()
+const  authControl = new AuthController();
 
-router.use(acessoRouter)
-router.use(atendimentoRouter)
-router.use(atendimentoSistemaRouter)
-router.use(chamadoRouter)
-router.use(chamadoSistemaInternoRouter)
-router.use(origemRouter)
-router.use(setorRouter)
-router.use(solicitanteRouter)
-router.use(statusRouter)
-router.use(tipoContratacaoRouter)
-router.use(userRouter)
-router.use(userHasAcessoRouter)
 router.use(loginRouter)
+router.use(authControl.authenticate.bind(authControl))
+router.use(accessRouter)
+router.use(serviceRouter)
+router.use(systemRouter)
+router.use(protocolRouter)
+router.use(originRouter)
+router.use(sectorRouter)
+router.use(statusRouter)
+router.use(contractTypeRouter)
+router.use(userRouter)
+router.use(userAccessRouter)
 
 export default router

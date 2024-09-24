@@ -4,49 +4,36 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("users", {
-      id_user: {
+      id: {
         type: Sequelize.INTEGER.UNSIGNED,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
       },
-      nome: {
+      name: {
         type: new Sequelize.STRING(100),
         allowNull: false,
         unique: true,
       },
-      senha: {
-        type: new Sequelize.STRING(255),
-        allowNull: false,
-      },
-      funcao: {
+      function: {
         type: new Sequelize.STRING(45),
         allowNull: false,
       },
-      superior: {
-        type: new Sequelize.STRING(45),
-        allowNull: false,
-      },
-      email: {
-        type: new Sequelize.STRING(70),
-        allowNull: true,
-        unique: true,
-      },
-      usuario: {
-        type: new Sequelize.STRING(45),
-        allowNull: true,
-        unique: true,
-      },
-      tipos_contratacoes_id_tipo_contratacao: {
+      id_contract_type: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
         references: {
-          model: "tipos_contratacoes",
-          key: "id_tipo_contratacao",
+          model: "contract_types",
+          key: "id",
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull:false
+      },
+      updated_at: Sequelize.DATE,
     });
   },
 

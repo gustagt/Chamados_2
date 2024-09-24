@@ -2,31 +2,34 @@ import Image from "next/image";
 import ButtonSecundary from "../buttons/ButtonSecundary";
 import LabelForm from "../label/LabelForm";
 import LabelInputRadio from "../label/LabelInputRadio";
-import { useRef, useState } from "react";
+import { SyntheticEvent, useRef, useState } from "react";
 import { Session } from "next-auth";
-import { useAppSelector, useAppStore } from "@/lib/hooks/redux";
+import { useAppDispatch, useAppSelector, useAppStore } from "@/lib/hooks/redux";
 import { getAcessos } from "@/lib/slices/acesso.slice";
+import { redirect } from "next/navigation";
+import { postChamado } from "@/lib/slices/chamado.slice";
 
 export default function FormCreateUser({
+  type,
   session,
   setores,
 }: FormCreateUserProps) {
   const store = useAppStore();
   const initialized = useRef(false);
 
-  if (!initialized.current) {
+  if (!initialized.current && session?.user.token) {
     store.dispatch(getAcessos(session?.user.token));
     initialized.current = true;
   }
 
   const acessos = useAppSelector((state) => state.acessoState.acessos);
 
-  const [name, setName] = useState<string>(
-    session?.user.name.substring(3) || ""
-  );
+  const dispatch = useAppDispatch();
+
+  const [nome, setNome] = useState<string>("");
   const [setor, setSetor] = useState<string>("");
   const [funcao, setFuncao] = useState<string>("");
-  const [superioImediatio, setSuperioImediatio] = useState<string>("");
+
   const [email, setEmail] = useState<string>("");
   const [acessoForm, setAcessoForm] = useState<string[]>([]);
   const [tipoContratacao, setTipoContratacao] = useState<string>("");
@@ -42,8 +45,38 @@ export default function FormCreateUser({
     setAcessoForm(newAcessoForm);
   }
 
+  function handleSubmit(event: SyntheticEvent) {
+    event.preventDefault();
+
+    if (!session?.user) {
+      alert("Sessão expirada.");
+      redirect("/login");
+    }
+
+    const chamado: IProtocol = {
+      name: session?.user.name.substring(3) ,
+      applicant: session.user.username,
+      idOrigin: type,
+      idSector: parseInt(setor),
+      idService: 48,
+      idStatus: 1,
+      email,
+      user: {
+        name: nome,
+        function: funcao,
+        idContractType: parseInt(tipoContratacao),
+        accesses: acessoForm.map(Number),
+      },
+    };
+
+    dispatch(postChamado({ chamado, token: session.user.token }));
+  }
+
   return (
-    <div className="flex flex-col gap-3 font-medium w-3/4 md:w-2/4">
+    <form
+      className="flex flex-col gap-3 font-medium w-3/4 md:w-2/4"
+      onSubmit={handleSubmit}
+    >
       <span className="flex text-sm font-normal text-red-500">
         <Image
           className="self-start pt-0.5"
@@ -60,8 +93,8 @@ export default function FormCreateUser({
         <input
           className="outline outline-1 outlineu-black rounded-sm h-8 px-2"
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
           required
         />
       </label>
@@ -90,9 +123,9 @@ export default function FormCreateUser({
         >
           <option></option>
           {setores &&
-            setores.map((setor: { idSetor: number; setor: string }) => (
-              <option key={`setor-${setor.idSetor}`} value={setor.idSetor}>
-                {setor.setor}
+            setores.map((setor: { id: number; sector: string }) => (
+              <option key={`setor-${setor.id}`} value={setor.id}>
+                {setor.sector}
               </option>
             ))}
         </select>
@@ -108,9 +141,9 @@ export default function FormCreateUser({
         >
           <option></option>
           {acessos &&
-            acessos.map((acesso: { idAcesso: number; acesso: string }) => (
-              <option key={`acesso-${acesso.idAcesso}`} value={acesso.idAcesso}>
-                {acesso.acesso}
+            acessos.map((acesso: { id: number; access: string }) => (
+              <option key={`acesso-${acesso.id}`} value={acesso.id}>
+                {acesso.access}
               </option>
             ))}
         </select>
@@ -122,14 +155,14 @@ export default function FormCreateUser({
           {acessoForm &&
             acessos &&
             acessos.map(
-              (acesso: { idAcesso: number; acesso: string }) =>
-                acessoForm.includes(String(acesso.idAcesso)) && (
+              (acesso: { id: number; access: string }) =>
+                acessoForm.includes(String(acesso.id)) && (
                   <div
-                    key={`acessoSelecionado-${acesso.idAcesso}`}
+                    key={`acessoSelecionado-${acesso.id}`}
                     className="flex  justify-between gap-1 bg-[#E5E5E5] text-[#727272] px-1 rounded-r-full cursor-pointer"
-                    onClick={() => handleAcessoDelete(String(acesso.idAcesso))}
+                    onClick={() => handleAcessoDelete(String(acesso.id))}
                   >
-                    {acesso.acesso}
+                    {acesso.access}
                     <Image
                       src="/icons/x.svg"
                       alt="exluir"
@@ -153,15 +186,11 @@ export default function FormCreateUser({
         />
       </label>
       <label htmlFor="" className="flex flex-col">
-        <LabelForm text="Superior Imediato:" required />
+        <LabelForm text="Superior Imediato:"  />
 
-        <input
-          className="outline outline-1 outlineu-black rounded-sm h-8 px-2"
-          type="text"
-          value={superioImediatio}
-          onChange={(e) => setSuperioImediatio(e.target.value)}
-          required
-        />
+        <div
+          className="outline outline-1 outlineu-black rounded-sm h-8 px-2 content-center"
+        >   {session?.user.name.substring(3)}</div>
       </label>
       <label htmlFor="" className="flex flex-col ">
         Forma de Contratação:
@@ -210,11 +239,12 @@ export default function FormCreateUser({
       <div className="flex justify-end">
         <ButtonSecundary text="Enviar" />
       </div>
-    </div>
+    </form>
   );
 }
 
 type FormCreateUserProps = {
   session: Session | null;
   setores: [];
+  type: number;
 };

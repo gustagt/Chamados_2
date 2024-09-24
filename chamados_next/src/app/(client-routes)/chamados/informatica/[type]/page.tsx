@@ -1,9 +1,10 @@
 "use client";
+
 import CardFormulario from "@/components/cards/CardFormulario";
 import { useAppSelector, useAppStore } from "@/lib/hooks/redux";
 import { getSetores } from "@/lib/slices/setor.slice";
 import { getAtendimentoOrigemID } from "@/lib/slices/atendimento.slice";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import { useSession } from "next-auth/react";
 
@@ -14,12 +15,13 @@ import ButtonLogout from "@/components/buttons/ButtonLogout";
 
 export default function Page({ params }: { params: { type: number } }) {
   const type = Number(params.type);
-  const { data: session } = useSession();
+
+  const { data: session, status} = useSession();
 
   const store = useAppStore();
   const initialized = useRef(false);
 
-  if (!initialized.current) {
+  if (!initialized.current && status === 'authenticated') {
     store.dispatch(getSetores(session?.user.token));
     store.dispatch(getSistemas(session?.user.token));
     store.dispatch(
@@ -39,7 +41,7 @@ export default function Page({ params }: { params: { type: number } }) {
   return (
     <div className="grid gap-2 grid-rows-2 m-4 grid-cols-none md:grid-cols-2 md:grid-rows-none  md:h-[96vh] ">
       <CardFormulario type={type} />
-      <form className="flex flex-col items-center h-full gap-16">
+      <div className="flex flex-col items-center h-full gap-16">
         <div className="grid grid-cols-4 w-full text-center">
           <h2 className="col-start-2 col-span-2 text-3xl  pt-16">
             Dados do chamado
@@ -57,10 +59,10 @@ export default function Page({ params }: { params: { type: number } }) {
             sistemas={sistemas}
           />
         ) : (
-          <FormCreateUser session={session} setores={setores}  />
+          <FormCreateUser session={session} setores={setores}  type={type}/>
         )}
         
-      </form>
+      </div>
     </div>
   );
 }

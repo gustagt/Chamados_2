@@ -3,8 +3,7 @@
 import ButtonLogout from "@/components/buttons/ButtonLogout";
 import IconLinkMenu from "@/components/links/IconLinkMenu";
 import IconLinkNav from "@/components/links/IconLinkNav";
-import Image from "next/image";
-import Link from "next/link";
+
 
 export default function Page() {
   return (

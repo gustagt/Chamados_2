@@ -26,7 +26,7 @@ export const requestConfig = (method:string, data:any, token?:string, image=null
 
   if (!config.headers) {
     config.headers = {};
-  }2
+  }
 
   if (token) {
     config.headers = {

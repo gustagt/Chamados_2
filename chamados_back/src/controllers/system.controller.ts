@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "express";
+import SystemService from "../service/system.service";
 
-import StatusService from "../service/status.service";
-
-class StatusController {
-  private service = new StatusService();
+class SystemController {
+  private service = new SystemService();
 
   async getAll(_req: Request, res: Response, next: NextFunction) {
     try {
@@ -13,7 +12,9 @@ class StatusController {
         next(error)
     }
   }
+
+
 }
 
 
-export default StatusController
+export default SystemController

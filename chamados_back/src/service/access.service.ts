@@ -1,9 +1,9 @@
 import { ModelStatic } from "sequelize";
 import {resp} from "../utils/resp";
-import Status from '../database/models/status.model';
+import Access from "../database/models/access.model";
 
-class StatusService {
-    private model : ModelStatic<Status> = Status;
+class AccessService {
+    private model : ModelStatic<Access> = Access;
 
     async getAll() {
         const status = await this.model.findAll()
@@ -11,4 +11,4 @@ class StatusService {
     }
 }
 
-export default StatusService
+export default AccessService

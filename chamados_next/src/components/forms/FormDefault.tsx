@@ -1,8 +1,12 @@
-import {useState } from "react";
+import {SyntheticEvent, useState } from "react";
 import LabelForm from "../label/LabelForm";
 import { Session } from "next-auth";
 import Image from "next/image";
 import ButtonSecundary from "../buttons/ButtonSecundary";
+
+import { redirect } from 'next/navigation';
+import { useAppDispatch } from "@/lib/hooks/redux";
+import { postChamado } from "@/lib/slices/chamado.slice";
 
 
 export default function FormDefault({
@@ -14,12 +18,9 @@ export default function FormDefault({
 }: FormDefaultProps) {
 
 
+  const dispatch = useAppDispatch()
 
-
-
-
-
-  const [name, setName] = useState<string>(
+  const [nome, setNome] = useState<string>(
     session?.user.name.substring(3) || ""
   );
   const [setor, setSetor] = useState<string>("");
@@ -27,16 +28,44 @@ export default function FormDefault({
   const [observacao, setObservacao] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [sistema, setSistema] = useState<string>("");
+
+
+
+
+  function handleSubmit(event: SyntheticEvent){
+    event.preventDefault()
+
+    if(!session?.user) {
+      alert('Sessão expirada.')
+      redirect('/login')
+    }
+
+    const chamado: IProtocol = {
+      name: nome,
+      applicant: session.user.username,
+      idOrigin: type,
+      idSector: parseInt(setor),
+      idService: parseInt(atendimento),
+      idStatus: 1,
+      details: observacao,
+      email,
+    }
+
+    if(sistema) chamado.idSystem = parseInt(sistema)
+      
+    dispatch(postChamado({chamado, token: session.user.token}))
+    
+  }
   
   return (
-    <div className="flex flex-col gap-3 font-medium w-2/4 md:w-1/3">
+    <form className="flex flex-col gap-3 font-medium w-3/4 md:w-2/4" onSubmit={handleSubmit}>
       <label htmlFor="" className="flex flex-col ">
         <LabelForm text="Nome:" required />
         <input
           className="outline outline-1 outlineu-black rounded-sm h-8 px-2"
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
           required
         />
       </label>
@@ -53,9 +82,9 @@ export default function FormDefault({
         >
           <option></option>
           {setores &&
-            setores.map((setor: { idSetor: number; setor: string }) => (
-              <option key={`setor-${setor.idSetor}`} value={setor.idSetor}>
-                {setor.setor}
+            setores.map((setor: { id: number; sector: string }) => (
+              <option key={`setor-${setor.id}`} value={setor.id}>
+                {setor.sector}
               </option>
             ))}
         </select>
@@ -76,12 +105,12 @@ export default function FormDefault({
 
           {atendimentos &&
             atendimentos.map(
-              (atendimento: { idAtendimento: number; atendimento: string }) => (
+              (atendimento: { id: number; service: string }) => (
                 <option
-                  key={`atendimento-${atendimento.idAtendimento}`}
-                  value={atendimento.idAtendimento}
+                  key={`atendimento-${atendimento.id}`}
+                  value={atendimento.id}
                 >
-                  {atendimento.atendimento}
+                  {atendimento.service}
                 </option>
               )
             )}
@@ -105,14 +134,14 @@ export default function FormDefault({
             {sistemas &&
               sistemas.map(
                 (sistemas: {
-                  idSistema: number;
-                  sistema: string;
+                  id: number;
+                  system: string;
                 }) => (
                   <option
-                    key={`sistemas-${sistemas.idSistema}`}
-                    value={sistemas.idSistema}
+                    key={`sistemas-${sistemas.id}`}
+                    value={sistemas.id}
                   >
-                    {sistemas.sistema}
+                    {sistemas.system}
                   </option>
                 )
               )}
@@ -159,7 +188,7 @@ export default function FormDefault({
       <div className="flex justify-end">
           <ButtonSecundary text="Enviar" />
         </div>
-    </div>
+    </form>
   );
 }
 

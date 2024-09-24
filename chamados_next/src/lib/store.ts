@@ -3,6 +3,7 @@ import setorReducer from './slices/setor.slice'
 import atendimentoReducer from './slices/atendimento.slice'
 import sistemaReducer from './slices/sistema.slice'
 import acessoReducer from './slices/acesso.slice'
+import chamadoReducer from './slices/chamado.slice'
 
 
 
@@ -13,6 +14,7 @@ export const makeStore = () => {
       atendimentoState: atendimentoReducer,
       sistemaState: sistemaReducer,
       acessoState: acessoReducer,
+      chamadoState: chamadoReducer,
     },
   })
 }

@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 
-import UserHasAcessoService from "../service/userHasAcesso.service";
+import UserAccessService from "../service/userAccess.service";
 
 
-class UserHasAcessoController {
-  private service = new UserHasAcessoService();
+class UserAccessController {
+  private service = new UserAccessService();
 
-  async getAll(req: Request, res: Response, next: NextFunction) {
+  async getAll(_req: Request, res: Response, next: NextFunction) {
     try {
         const {status, message} = await this.service.getAll()
         res.status(status).json(message)
@@ -17,4 +17,4 @@ class UserHasAcessoController {
 }
 
 
-export default UserHasAcessoController
+export default UserAccessController
