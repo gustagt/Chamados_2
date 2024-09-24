@@ -10,7 +10,7 @@ const encode = (data: any) => {
     },
     JWT_SECRET || "teste",
     {
-      expiresIn: "1h",
+      expiresIn: "3h",
     }
   );
 

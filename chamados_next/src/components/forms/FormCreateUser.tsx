@@ -2,7 +2,7 @@ import Image from "next/image";
 import ButtonSecundary from "../buttons/ButtonSecundary";
 import LabelForm from "../label/LabelForm";
 import LabelInputRadio from "../label/LabelInputRadio";
-import { SyntheticEvent, useRef, useState } from "react";
+import { SyntheticEvent, useEffect, useRef, useState } from "react";
 import { Session } from "next-auth";
 import { useAppDispatch, useAppSelector, useAppStore } from "@/lib/hooks/redux";
 import { getAcessos } from "@/lib/slices/acesso.slice";
@@ -16,11 +16,12 @@ export default function FormCreateUser({
 }: FormCreateUserProps) {
   const store = useAppStore();
   const initialized = useRef(false);
-
-  if (!initialized.current && session?.user.token) {
-    store.dispatch(getAcessos(session?.user.token));
-    initialized.current = true;
-  }
+  useEffect(() => {
+    if (!initialized.current && session?.user.token) {
+      store.dispatch(getAcessos(session.user.token));
+      initialized.current = true;
+    }
+  });
 
   const acessos = useAppSelector((state) => state.acessoState.acessos);
 
@@ -54,7 +55,7 @@ export default function FormCreateUser({
     }
 
     const chamado: IProtocol = {
-      name: session?.user.name.substring(3) ,
+      name: session?.user.name.substring(3),
       applicant: session.user.username,
       idOrigin: type,
       idSector: parseInt(setor),
@@ -186,11 +187,12 @@ export default function FormCreateUser({
         />
       </label>
       <label htmlFor="" className="flex flex-col">
-        <LabelForm text="Superior Imediato:"  />
+        <LabelForm text="Superior Imediato:" />
 
-        <div
-          className="outline outline-1 outlineu-black rounded-sm h-8 px-2 content-center"
-        >   {session?.user.name.substring(3)}</div>
+        <div className="outline outline-1 outlineu-black rounded-sm h-8 px-2 content-center">
+          {" "}
+          {session?.user.name.substring(3)}
+        </div>
       </label>
       <label htmlFor="" className="flex flex-col ">
         Forma de Contratação:

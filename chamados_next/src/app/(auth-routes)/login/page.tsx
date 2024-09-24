@@ -61,7 +61,7 @@ export default function Page() {
           />
           <div className="flex mt-7 justify-between gap-3 flex-wrap 2xl:flex-nowrap ">
             <ButtonPrimary text="Entrar"></ButtonPrimary>
-            <LinkPrimary path="/consult" text="Consultar Chamado"></LinkPrimary>
+            <LinkPrimary path="/consulta" text="Consultar Chamado"></LinkPrimary>
           </div>
         </form>
       </div>

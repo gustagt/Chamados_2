@@ -4,7 +4,7 @@ import CardFormulario from "@/components/cards/CardFormulario";
 import { useAppSelector, useAppStore } from "@/lib/hooks/redux";
 import { getSetores } from "@/lib/slices/setor.slice";
 import { getAtendimentoOrigemID } from "@/lib/slices/atendimento.slice";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import { useSession } from "next-auth/react";
 
@@ -16,27 +16,26 @@ import ButtonLogout from "@/components/buttons/ButtonLogout";
 export default function Page({ params }: { params: { type: number } }) {
   const type = Number(params.type);
 
-  const { data: session, status} = useSession();
+  const { data: session, status } = useSession();
 
   const store = useAppStore();
   const initialized = useRef(false);
-
-  if (!initialized.current && status === 'authenticated') {
-    store.dispatch(getSetores(session?.user.token));
-    store.dispatch(getSistemas(session?.user.token));
-    store.dispatch(
-      getAtendimentoOrigemID({ origem: type, token: session?.user.token })
-    );
-    initialized.current = true;
-  }
+  useEffect(() => {
+    if (!initialized.current && status === "authenticated") {
+      store.dispatch(getSetores(session?.user.token));
+      store.dispatch(getSistemas(session?.user.token));
+      store.dispatch(
+        getAtendimentoOrigemID({ origem: type, token: session?.user.token })
+      );
+      initialized.current = true;
+    }
+  });
 
   const setores = useAppSelector((state) => state.setorState.setores);
   const atendimentos = useAppSelector(
     (state) => state.atendimentoState.atendimentos
   );
-  const sistemas = useAppSelector(
-    (state) => state.sistemaState.sistemas
-  );
+  const sistemas = useAppSelector((state) => state.sistemaState.sistemas);
 
   return (
     <div className="grid gap-2 grid-rows-2 m-4 grid-cols-none md:grid-cols-2 md:grid-rows-none  md:h-[96vh] ">
@@ -47,8 +46,10 @@ export default function Page({ params }: { params: { type: number } }) {
             Dados do chamado
           </h2>
 
-     
-          <ButtonLogout pathIcon="/icons/logout.svg" className="hidden md:block"/>
+          <ButtonLogout
+            pathIcon="/icons/logout.svg"
+            className="hidden md:block"
+          />
         </div>
         {type !== 3 ? (
           <FormDefault
@@ -59,9 +60,8 @@ export default function Page({ params }: { params: { type: number } }) {
             sistemas={sistemas}
           />
         ) : (
-          <FormCreateUser session={session} setores={setores}  type={type}/>
+          <FormCreateUser session={session} setores={setores} type={type} />
         )}
-        
       </div>
     </div>
   );

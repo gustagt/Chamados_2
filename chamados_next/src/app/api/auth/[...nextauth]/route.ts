@@ -19,11 +19,11 @@ const nextAuthOptions: NextAuthOptions ={
               body: JSON.stringify(credentials),
               headers: { "Content-Type": "application/json" }
             })
-            const user = await res.json()
+            const data = await res.json()
       
    
-            if (res.ok && user) {
-              return user
+            if (res.ok && data.user) {
+              return data.user
             }
 
             return null
@@ -31,7 +31,8 @@ const nextAuthOptions: NextAuthOptions ={
         })
       ],
     pages: {
-        signIn: '/login'
+        signIn: '/login',
+         
     },
     callbacks:{
         async jwt({token, user}){
@@ -39,10 +40,10 @@ const nextAuthOptions: NextAuthOptions ={
             return token
         },
         async session({session, token}){
-            session = token.user as any
+            session.user = token.user as any     
             return session
         }
-    }
+    },
 }
 
 const handler = NextAuth(nextAuthOptions)
