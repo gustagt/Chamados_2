@@ -10,15 +10,15 @@ class AuthController {
       const username = req.body.username;
       const password = req.body.password;
 
-      const { status, message } = await UserLdap.authenticate(
+      const { status, data } = await UserLdap.authenticate(
         username,
         password
       );
 
       if(status === 200){
-        res.status(status).json({ user: message });
+        res.status(status).json({ user: data });
       }else{
-        res.status(status).json({ error: message });
+        res.status(status).json({ error: data });
       }
 
     } catch (error) {

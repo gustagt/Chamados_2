@@ -7,8 +7,8 @@ class ContractTypeController {
 
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-        const {status, message} = await this.service.getAll()
-        res.status(status).json(message)
+        const {status, data} = await this.service.getAll()
+        res.status(status).json(data)
     } catch (error) {
         next(error)
     }

@@ -6,8 +6,8 @@ class ServiceController {
 
   async getAll(_req: Request, res: Response, next: NextFunction) {
     try {
-        const {status, message} = await this.service.getAll()
-        res.status(status).json(message)
+        const {status, data} = await this.service.getAll()
+        res.status(status).json(data)
     } catch (error) {
         next(error)
     }
@@ -15,8 +15,8 @@ class ServiceController {
   async getOriginId(req: Request, res: Response, next: NextFunction) {
     try {
         const id = req.params.id
-        const {status, message} = await this.service.getOriginId(id)
-        res.status(status).json(message)
+        const {status, data} = await this.service.getOriginId(id)
+        res.status(status).json(data)
     } catch (error) {
         next(error)
     }
