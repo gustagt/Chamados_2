@@ -29,15 +29,13 @@ class AuthController {
 
   async authenticate(req: Request, res: Response, next: NextFunction) {
     try {
-      try {
+      
         const token = req.headers.authorization;
-        if (token) {
-          jwt.decode(token);
-        } else return res.status(401).json(respE("Token não encontrdo:"));
-      } catch (error) {
-        console.log(error);
-        return res.status(401).json({ error: error });
-      }
+        if (!token) {
+          return res.status(401).json(respE("Token não encontrado:"));
+        } 
+        
+        jwt.decode(token);
 
       next();
     } catch (error) {

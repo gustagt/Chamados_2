@@ -3,10 +3,12 @@ import acessoService from "../services/acesso.service";
 
 
 // First, create the thunk
-export const getAcessos = createAsyncThunk(
+export const getAcessos = createAsyncThunk<[], string | undefined, {rejectValue: string}>(
   "acesso/getAcessos",
   async (token: string | undefined, thunkAPI) => {
     const response = await acessoService.getAcessos(token);
+
+    if (response.message)return thunkAPI.rejectWithValue(response.message)
 
     return response;
   }
@@ -15,11 +17,13 @@ export const getAcessos = createAsyncThunk(
 interface AcessosState {
   acessos: [];
   loading: "idle" | "pending" | "succeeded" | "failed";
+  error?: string;
 }
 
 const initialState = {
   acessos: [],
   loading: "idle",
+  error: undefined,
 } satisfies AcessosState as AcessosState;
 
 // Then, handle actions in your reducers:
@@ -31,6 +35,7 @@ const acessoSlice = createSlice({
     reset: (state) => {
       state.acessos = [];
       state.loading = "idle";
+      state.error = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -39,15 +44,19 @@ const acessoSlice = createSlice({
       // Add user to the state array
       state.acessos = action.payload;
       state.loading = "succeeded";
+      state.error = undefined;
     });
     builder.addCase(getAcessos.pending, (state, action) => {
       // Add user to the state array
       state.acessos = [];
       state.loading = "pending";
-    });builder.addCase(getAcessos.rejected, (state, action) => {
+      state.error = undefined;
+    });
+    builder.addCase(getAcessos.rejected, (state, action) => {
       // Add user to the state array
       state.acessos = [];
       state.loading = "failed";
+      state.error = action.payload;
     });
   },
 });
