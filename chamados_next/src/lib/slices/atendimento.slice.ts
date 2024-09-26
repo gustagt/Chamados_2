@@ -1,25 +1,32 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import atendimentoService from "../services/atendimento.service";
 
-
 // First, create the thunk
-export const getAtendimentoOrigemID = createAsyncThunk(
-  "atendimento/getAtendimentoOrigemID",
-  async ({origem, token} : {origem:number, token: string | undefined}, thunkAPI) => {
-    const response = await atendimentoService.getAtendiemntoOrigemID(origem,token);
+export const getAtendimentoOrigemID = createAsyncThunk<
+  [],
+  { origem: number; token: string | undefined },
+  { rejectValue: string }
+>("atendimento/getAtendimentoOrigemID", async (data, thunkAPI) => {
+  const response = await atendimentoService.getAtendiemntoOrigemID(
+    data.origem,
+    data.token
+  );
 
-    return response;
-  }
-);
+  if (response.message) return thunkAPI.rejectWithValue(response.message);
+
+  return response;
+});
 
 interface AtendimentosState {
-    atendimentos: [];
+  atendimentos: [];
   loading: "idle" | "pending" | "succeeded" | "failed";
+  error?: string;
 }
 
 const initialState = {
-    atendimentos: [],
+  atendimentos: [],
   loading: "idle",
+  error: undefined,
 } satisfies AtendimentosState as AtendimentosState;
 
 // Then, handle actions in your reducers:
@@ -31,6 +38,7 @@ const atendimentoSlice = createSlice({
     reset: (state) => {
       state.atendimentos = [];
       state.loading = "idle";
+      state.error = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -39,15 +47,19 @@ const atendimentoSlice = createSlice({
       // Add user to the state array
       state.atendimentos = action.payload;
       state.loading = "succeeded";
+      state.error = undefined;
     });
     builder.addCase(getAtendimentoOrigemID.pending, (state, action) => {
       // Add user to the state array
       state.atendimentos = [];
       state.loading = "pending";
-    });builder.addCase(getAtendimentoOrigemID.rejected, (state, action) => {
+      state.error = undefined;
+    });
+    builder.addCase(getAtendimentoOrigemID.rejected, (state, action) => {
       // Add user to the state array
       state.atendimentos = [];
       state.loading = "failed";
+      state.error = action.payload;
     });
   },
 });

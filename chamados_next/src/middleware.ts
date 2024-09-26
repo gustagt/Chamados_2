@@ -3,12 +3,14 @@ import withAuth from "next-auth/middleware";
 // See "Matching Paths" below to learn more
 
 export default withAuth(
- 
+  function middleware(req) {
+  },
   {
     callbacks: {
-      authorized: ({ req, token }) => {
-        return token ? true : false 
+       authorized: async({ req, token }) => {
+        return !!token  
       },
+      
     },
     pages: {
       signIn: '/login'

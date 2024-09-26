@@ -4,7 +4,7 @@ import CardFormulario from "@/components/cards/CardFormulario";
 import { useAppSelector, useAppStore } from "@/lib/hooks/redux";
 import { getSetores } from "@/lib/slices/setor.slice";
 import { getAtendimentoOrigemID } from "@/lib/slices/atendimento.slice";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useSession } from "next-auth/react";
 
@@ -31,11 +31,24 @@ export default function Page({ params }: { params: { type: number } }) {
     }
   });
 
-  const setores = useAppSelector((state) => state.setorState.setores);
-  const atendimentos = useAppSelector(
-    (state) => state.atendimentoState.atendimentos
+  const { setores, error: errorSetor } = useAppSelector(
+    (state) => state.setorState
   );
-  const sistemas = useAppSelector((state) => state.sistemaState.sistemas);
+  const { atendimentos, error: errorAtendimento } = useAppSelector(
+    (state) => state.atendimentoState
+  );
+  const { sistemas, error: errorSistema } = useAppSelector(
+    (state) => state.sistemaState
+  );
+
+  const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    if(errorSetor) return setError(errorSetor)
+    if(errorAtendimento) return setError(errorAtendimento)
+    if(errorSistema) return setError(errorSistema)
+    return setError('')
+  }, [errorSetor, errorAtendimento,errorSistema]);
 
   return (
     <div className="grid gap-2 grid-rows-2 m-4 grid-cols-none md:grid-cols-2 md:grid-rows-none  md:h-[96vh] ">
@@ -51,6 +64,13 @@ export default function Page({ params }: { params: { type: number } }) {
             className="hidden md:block"
           />
         </div>
+        {error && (
+        <div className="bg-red-500 flex flex-col justify-center items-center text-white p-6 rounded-md">
+          <h3 className="text-lg">Erro</h3>
+          <span>{error}</span>
+        </div>
+      )}
+
         {type !== 3 ? (
           <FormDefault
             session={session}
@@ -60,7 +80,7 @@ export default function Page({ params }: { params: { type: number } }) {
             sistemas={sistemas}
           />
         ) : (
-          <FormCreateUser session={session} setores={setores} type={type} />
+          <FormCreateUser session={session} setores={setores} type={type} handleError={setError}/>
         )}
       </div>
     </div>

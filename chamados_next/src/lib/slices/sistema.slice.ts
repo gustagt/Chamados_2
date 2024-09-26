@@ -1,26 +1,28 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import sistemaService from "../services/sistema.service";
 
-
 // First, create the thunk
-export const getSistemas = createAsyncThunk(
-  "sistema/getSistemas",
-  async (token: string | undefined, thunkAPI) => {
-    const response = await sistemaService.getSistemas(token);
+export const getSistemas = createAsyncThunk<
+  [],
+  string | undefined,
+  { rejectValue: string }
+>("sistema/getSistemas", async (token: string | undefined, thunkAPI) => {
+  const response = await sistemaService.getSistemas(token);
+  if (response.message) return thunkAPI.rejectWithValue(response.message);
 
-
-    return response;
-  }
-);
+  return response;
+});
 
 interface SistemasState {
-    sistemas: [];
+  sistemas: [];
   loading: "idle" | "pending" | "succeeded" | "failed";
+  error?: string;
 }
 
 const initialState = {
   sistemas: [],
   loading: "idle",
+  error: undefined,
 } satisfies SistemasState as SistemasState;
 
 // Then, handle actions in your reducers:
@@ -32,6 +34,7 @@ const sistemaSlice = createSlice({
     reset: (state) => {
       state.sistemas = [];
       state.loading = "idle";
+      state.error = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -40,15 +43,19 @@ const sistemaSlice = createSlice({
       // Add user to the state array
       state.sistemas = action.payload;
       state.loading = "succeeded";
+      state.error = undefined;
     });
     builder.addCase(getSistemas.pending, (state, action) => {
       // Add user to the state array
       state.sistemas = [];
       state.loading = "pending";
-    });builder.addCase(getSistemas.rejected, (state, action) => {
+      state.error = undefined;
+    });
+    builder.addCase(getSistemas.rejected, (state, action) => {
       // Add user to the state array
       state.sistemas = [];
       state.loading = "failed";
+      state.error = action.payload;
     });
   },
 });
