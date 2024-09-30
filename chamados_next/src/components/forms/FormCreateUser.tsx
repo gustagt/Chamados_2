@@ -8,6 +8,9 @@ import { useAppDispatch, useAppSelector, useAppStore } from "@/lib/hooks/redux";
 import { getAcessos } from "@/lib/slices/acesso.slice";
 import { redirect } from "next/navigation";
 import { postChamado } from "@/lib/slices/chamado.slice";
+import ModalPrimary from "../modals/ModalPrimary";
+import ModalSecondary from "../modals/ModalSecondary";
+import ModalAssess from "../modals/ModalAssess";
 
 
 
@@ -27,6 +30,7 @@ export default function FormCreateUser({
   });
 
   const { acessos, error: errorAcesso } = useAppSelector((state) => state.acessoState);
+  const postChamadoStatus = useAppSelector((state) => state.chamadoState.loading)
 
   const dispatch = useAppDispatch();
 
@@ -37,6 +41,8 @@ export default function FormCreateUser({
   const [email, setEmail] = useState<string>("");
   const [acessoForm, setAcessoForm] = useState<string[]>([]);
   const [tipoContratacao, setTipoContratacao] = useState<string>("");
+
+  const [statusPage, setStatusPage] = useState<number>()
 
 
   useEffect(() => {
@@ -81,6 +87,8 @@ export default function FormCreateUser({
     };
 
     dispatch(postChamado({ chamado, token: session.user.token }));
+
+    setStatusPage(2)
   }
 
   return (
@@ -88,6 +96,9 @@ export default function FormCreateUser({
       className="flex flex-col gap-3 font-medium w-3/4 md:w-2/4"
       onSubmit={handleSubmit}
     >
+        {postChamadoStatus === 'succeeded' && statusPage === 3 && <ModalPrimary pathIcon="/icons/checkGreen.svg" altIcon="Sucesso"  /> }
+      {postChamadoStatus === 'succeeded' && statusPage === 2 && <ModalAssess pathIcon="/icons/star.svg" altIcon="Estrela" handleStatusPage={setStatusPage} /> }
+      
       
       <span className="flex text-sm font-normal text-red-500">
         <Image
@@ -218,6 +229,7 @@ export default function FormCreateUser({
             value={1}
             inputFamily="tipoContratacao"
             setValue={setTipoContratacao}
+            required
           />
           <LabelInputRadio
             id="terceirizado"
@@ -225,6 +237,7 @@ export default function FormCreateUser({
             value={2}
             inputFamily="tipoContratacao"
             setValue={setTipoContratacao}
+            required
           />
           <LabelInputRadio
             id="comissionado"
@@ -232,6 +245,7 @@ export default function FormCreateUser({
             value={3}
             inputFamily="tipoContratacao"
             setValue={setTipoContratacao}
+            required
           />
           <LabelInputRadio
             id="efetivo"
@@ -239,6 +253,7 @@ export default function FormCreateUser({
             value={4}
             inputFamily="tipoContratacao"
             setValue={setTipoContratacao}
+            required
           />
         </div>
       </label>

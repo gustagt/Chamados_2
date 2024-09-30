@@ -6,7 +6,7 @@ import acessoService from "../services/acesso.service";
 export const getAcessos = createAsyncThunk<[], string | undefined, {rejectValue: string}>(
   "acesso/getAcessos",
   async (token, thunkAPI) => {
-    const response = await acessoService.getAcessos(token+'dsadssa');
+    const response = await acessoService.getAcessos(token);
 
     if (response.message)return thunkAPI.rejectWithValue(response.message)
 

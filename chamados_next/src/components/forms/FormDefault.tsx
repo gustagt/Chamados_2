@@ -1,12 +1,16 @@
-import {SyntheticEvent, useState } from "react";
+import {SyntheticEvent, useEffect, useState } from "react";
 import LabelForm from "../label/LabelForm";
 import { Session } from "next-auth";
 import Image from "next/image";
 import ButtonSecundary from "../buttons/ButtonSecundary";
 
 import { redirect } from 'next/navigation';
-import { useAppDispatch } from "@/lib/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
 import { postChamado } from "@/lib/slices/chamado.slice";
+import ModalPrimary from "../modals/ModalPrimary";
+import ModalSecondary from "../modals/ModalSecondary";
+import ModalAssess from "../modals/ModalAssess";
+
 
 
 export default function FormDefault({
@@ -17,6 +21,7 @@ export default function FormDefault({
   sistemas,
 }: FormDefaultProps) {
 
+  const postChamadoStatus = useAppSelector((state) => state.chamadoState.loading)
 
   const dispatch = useAppDispatch()
 
@@ -28,6 +33,8 @@ export default function FormDefault({
   const [observacao, setObservacao] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [sistema, setSistema] = useState<string>("");
+
+  const [statusPage, setStatusPage] = useState<number>(0)
 
 
 
@@ -54,11 +61,18 @@ export default function FormDefault({
     if(sistema) chamado.idSystem = parseInt(sistema)
       
     dispatch(postChamado({chamado, token: session.user.token}))
-    
+
+    setStatusPage(1)
   }
   
   return (
-    <form className="flex flex-col gap-3 font-medium w-3/4 md:w-2/4" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-3 font-medium w-3/4 md:w-2/4 " onSubmit={handleSubmit}>
+      {postChamadoStatus === 'succeeded' && statusPage === 3 && <ModalPrimary pathIcon="/icons/checkGreen.svg" altIcon="Sucesso"  /> }
+      {postChamadoStatus === 'succeeded' && statusPage === 1 && <ModalSecondary pathIcon="/icons/alertBig.svg" altIcon="Alerta" handleStatusPage={setStatusPage}/> }
+      {postChamadoStatus === 'succeeded' && statusPage === 2 && <ModalAssess pathIcon="/icons/star.svg" altIcon="Estrela" handleStatusPage={setStatusPage} /> }
+      
+      
+      
       <label htmlFor="" className="flex flex-col ">
         <LabelForm text="Nome:" required />
         <input
@@ -75,7 +89,7 @@ export default function FormDefault({
         <select
           name="setores"
           id="setores"
-          className="outline outline-1 outlineu-black rounded-sm h-8 px-2 max-w-72  sm:max-w-none bg-white"
+          className="outline outline-1 outline-black rounded-sm h-8 px-2 max-w-72  sm:max-w-none bg-white"
           value={setor}
           onChange={(e) => setSetor(e.target.value)}
           required

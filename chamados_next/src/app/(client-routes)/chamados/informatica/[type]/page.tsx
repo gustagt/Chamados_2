@@ -40,15 +40,18 @@ export default function Page({ params }: { params: { type: number } }) {
   const { sistemas, error: errorSistema } = useAppSelector(
     (state) => state.sistemaState
   );
-
+  const {  error: errorChamado } = useAppSelector(
+    (state) => state.chamadoState
+  );
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
     if(errorSetor) return setError(errorSetor)
     if(errorAtendimento) return setError(errorAtendimento)
     if(errorSistema) return setError(errorSistema)
+    if(errorChamado) return setError(errorChamado)
     return setError('')
-  }, [errorSetor, errorAtendimento,errorSistema]);
+  }, [errorSetor, errorAtendimento,errorSistema,errorChamado]);
 
   return (
     <div className="grid gap-2 grid-rows-2 m-4 grid-cols-none md:grid-cols-2 md:grid-rows-none  md:h-[96vh] ">

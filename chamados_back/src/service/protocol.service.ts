@@ -2,9 +2,11 @@ import { ModelStatic } from "sequelize";
 import { resp } from "../utils/resp";
 import Protocol from "../database/models/protocol.model";
 import IProtocol from "../interfaces/IProtocol";
+import User from "../database/models/user.model";
 
 class ProtocolService {
   private model: ModelStatic<Protocol> = Protocol;
+  
 
   async getAll() {
     const protocols = await this.model.findAll({
@@ -21,6 +23,10 @@ class ProtocolService {
 
   async insert(protocol: IProtocol) {
     try {
+      if (protocol.user?.name) {
+        const user = await User.findOne({where: {name: protocol.user?.name}})
+         if(user) return resp(500, { message: "Usuario ja existente no banco de dados." })
+      }
       const protocolRet = await this.model.create(protocol, {
         include: Protocol.associations.user,
       });
@@ -30,7 +36,7 @@ class ProtocolService {
       }
       return resp(201, protocolRet);
     } catch (error) {
-      return resp(500, { message: "Erro ao criar o chamado", error });
+      return resp(500, { message: "Ocorreu um erro ao solicitar chamado", error });
     }
   }
 
