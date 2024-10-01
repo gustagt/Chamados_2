@@ -10,8 +10,8 @@ import contractTypeRouter from "./contractType.router";
 import userRouter from "./user.router";
 import userAccessRouter from "./userAccess.router";
 import loginRouter from "./auth.router";
-
 import AuthController from '../controllers/auth.controller';
+import reviewRouter from "./review.router";
 
 
 
@@ -30,5 +30,6 @@ router.use(statusRouter)
 router.use(contractTypeRouter)
 router.use(userRouter)
 router.use(userAccessRouter)
+router.use(reviewRouter)
 
 export default router

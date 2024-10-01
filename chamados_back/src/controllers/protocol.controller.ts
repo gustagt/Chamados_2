@@ -24,7 +24,7 @@ class ProtocolController {
     }
   }
 
-  async postProtocol(req: Request, res: Response, next: NextFunction) {
+  async post(req: Request, res: Response, next: NextFunction) {
     try {
       const form: IProtocol = req.body;
 
