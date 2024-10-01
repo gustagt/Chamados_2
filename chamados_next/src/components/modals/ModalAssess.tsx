@@ -1,3 +1,6 @@
+import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
+import { postReview } from "@/lib/slices/chamado.slice";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -7,12 +10,29 @@ export default function ModalAssess({
   handleStatusPage,
 }: ModalAssessProps) {
   const items = [0, 1, 2, 3, 4];
+  const { data: session, status } = useSession();
+  const chamado = useAppSelector((state)=> state.chamadoState.chamado)
 
   const [star, setStar] = useState<number>(0);
-  
+
+  const [suggestion, setSuggestion] = useState<string>();
+
+  const dispatch = useAppDispatch();
+
   const handleAssess = () => {
+    if(chamado?.id && session){
+      const review: IReview = {
+        star,
+        suggestion: suggestion,
+        idProtocol: chamado.id,
+      };
+      dispatch(postReview({review,  token : session?.user.token}));
+    }
+    
     handleStatusPage(3);
   };
+
+
   return (
     <div className="flex justify-center items-center bg-black/50 backdrop-blur-sm fixed inset-0">
       <div className="flex flex-col bg-white w-3/4 md:w-2/4 lg:w-1/3 xl:w-1/4 2xl:w-1/5  rounded-2xl p-8 gap-14">
@@ -35,7 +55,7 @@ export default function ModalAssess({
             <svg
               key={index}
               className={`w-16 h-16 text-gray-300 ms-1 hover:cursor-pointer ${
-                star >= index + 1 && "text-[#faab00]"
+                star >= index + 1 && "text-[#ffae00]"
               }`}
               onClick={() => setStar(index + 1)}
               aria-hidden="true"
@@ -55,6 +75,8 @@ export default function ModalAssess({
               className="border border-[#727272] rounded-lg resize-none h-32 p-2 focus:outline-[#FFAD00] "
               name=""
               id=""
+              maxLength={300}
+              onChange={(e) => setSuggestion(e.target.value)}
             ></textarea>
           </label>
 
