@@ -10,17 +10,21 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
+      star:{
+        type: Sequelize.INTEGER,
+        allowNull:false,
+      },
       suggestion: {
         type: new Sequelize.STRING(300),
         allowNull: true,
       },
+      
       id_protocol:{
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
         references:{
           model:'protocols',
           key:'id',
-          
         },
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'

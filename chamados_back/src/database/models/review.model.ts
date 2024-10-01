@@ -16,11 +16,12 @@ class Review extends Model<
   InferCreationAttributes<Review>
 > {
   declare id: CreationOptional<number>;
+  declare star: number;
   declare suggestion: CreationOptional<string>;
 
-  declare idProtocol: ForeignKey<Protocol['id']>;
+  declare idProtocol: ForeignKey<Protocol["id"]>;
 
-  declare protocol: NonAttribute<Protocol>
+  declare protocol: NonAttribute<Protocol>;
 
   declare associations?: {
     protocol: Association<Review, Protocol>;
@@ -35,6 +36,10 @@ Review.init(
       autoIncrement: true,
       primaryKey: true,
     },
+    star: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     suggestion: {
       type: new DataTypes.STRING(300),
       allowNull: true,
@@ -46,7 +51,7 @@ Review.init(
         model: Protocol,
         key: "id",
       },
-      unique:true,
+      unique: true,
       onDelete: "CASCADE",
       onUpdate: "CASCADE",
     },
