@@ -1,6 +1,15 @@
 import Image from "next/image";
 import IconLinkNav from "../links/IconLinkNav";
 import ButtonLogout from "../buttons/ButtonLogout";
+import IconThreeDot from "../Icons/IconThreeDot";
+import IconCode from "../Icons/IconCode";
+import IconOutlet from "../Icons/IconOutlet";
+import IconPrinter from "../Icons/IconPrinter";
+import IconSystem from "../Icons/IconSystem";
+import IconTell from "../Icons/IconTell";
+import IconUser from "../Icons/IconUser";
+import IconUserAdd from "../Icons/IconUserAdd";
+import IconWorkStation from "../Icons/IconWorkStation";
 
 export default function CardFormulario({ type }: CardProps) {
   let text;
@@ -9,46 +18,54 @@ export default function CardFormulario({ type }: CardProps) {
   switch (type) {
     case 0:
       text = "Outros";
-      icon = "outros";
+      icon = <IconThreeDot width={196} height={196} color="white" />;
       break;
     case 1:
       text = "Computador";
-      icon = "Workstation-white";
+      icon = <IconWorkStation width={196} height={196} color="white" />;
+
       break;
     case 2:
       text = "Sistema";
-      icon = "sistem";
+      icon = <IconSystem width={196} height={196} color="white" />;
+
       break;
     case 3:
       text = "Criação de Usuário";
-      icon = "create-user";
+      icon = <IconUserAdd width={196} height={196} color="white" />;
+
       break;
     case 4:
       text = "Impressora";
-      icon = "Print";
+      icon = <IconPrinter width={196} height={196} color="white" />;
+
       break;
     case 5:
       text = "Periférico";
-      icon = "Electrical";
+      icon = <IconOutlet width={196} height={196} color="white" />;
+
       break;
     case 6:
       text = "Sistemas Internos";
-      icon = "SourceCode";
+      icon = <IconCode width={196} height={196} color="white" />;
+
       break;
     case 7:
       text = "Telefone";
-      icon = "Phone";
+      icon = <IconTell width={196} height={196} color="white" />;
+
       break;
     case 8:
       text = "Usuario";
-      icon = "user";
+      icon = <IconUser width={196} height={196} color="white" />;
+
       break;
   }
 
   return (
-    <div className="bg-teclado bg-cover h-fit md:h-full  rounded">
-      <div className="bg-black-90  h-full flex flex-col items-center rounded text-white gap-24 pb-16 md:pb-0">
-        <div className="grid grid-cols-4 w-full text-center ">
+    <div className="bg-teclado bg-cover h-fit sm:h-full  rounded">
+      <div className="bg-black-90  sm:h-full flex flex-col items-center rounded text-white gap-12 sm:gap-24 pb-16 md:pb-0">
+        <div className="grid grid-cols-4 w-full text-center items-center">
           <IconLinkNav
             pathIcon="/icons/back-w.svg"
             altIcon="Voltar"
@@ -63,14 +80,7 @@ export default function CardFormulario({ type }: CardProps) {
           />
         </div>
         <div className="flex flex-col gap-6">
-          <Image
-            className="self-center w-full sm:w-48"
-            src={`/icons/${icon}.svg`}
-            alt="Logo Chamado"
-            width={196}
-            height={196}
-            priority
-          />
+          {icon}
           <h3 className="text-2xl text-white text-center">{text}</h3>
         </div>
         <div className="px-8 text-justify">

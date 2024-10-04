@@ -62,13 +62,14 @@ export default function FormDefault({
       
     dispatch(postChamado({chamado, token: session.user.token}))
 
-    setStatusPage(1)
+    if(type===1) return setStatusPage(1)
+    setStatusPage(2)
   }
   
   return (
-    <form className="flex flex-col gap-3 font-medium w-3/4 md:w-2/4 " onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-3 font-medium w-5/6 sm:w-3/4 md:w-2/4 " onSubmit={handleSubmit}>
       {postChamadoStatus === 'succeeded' && statusPage === 3 && <ModalPrimary pathIcon="/icons/checkGreen.svg" altIcon="Sucesso"  /> }
-      {postChamadoStatus === 'succeeded' && statusPage === 1 && <ModalSecondary pathIcon="/icons/alertBig.svg" altIcon="Alerta" handleStatusPage={setStatusPage}/> }
+      {postChamadoStatus === 'succeeded' && statusPage === 1 &&  <ModalSecondary pathIcon="/icons/alertBig.svg" altIcon="Alerta" handleStatusPage={setStatusPage}/> }
       {postChamadoStatus === 'succeeded' && statusPage === 2 && <ModalAssess pathIcon="/icons/star.svg" altIcon="Estrela" handleStatusPage={setStatusPage} /> }
       
       
@@ -89,7 +90,7 @@ export default function FormDefault({
         <select
           name="setores"
           id="setores"
-          className="outline outline-1 outline-black rounded-sm h-8 px-2 max-w-72  sm:max-w-none bg-white"
+          className="outline outline-1 outline-black rounded-sm h-8 px-2 max-w-[80vw] sm:max-w-none  sm:max-w-none bg-white"
           value={setor}
           onChange={(e) => setSetor(e.target.value)}
           required

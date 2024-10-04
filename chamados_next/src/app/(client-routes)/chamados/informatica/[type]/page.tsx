@@ -54,7 +54,7 @@ export default function Page({ params }: { params: { type: number } }) {
   }, [errorSetor, errorAtendimento,errorSistema,errorChamado]);
 
   return (
-    <div className="grid gap-2 grid-rows-2 m-4 grid-cols-none md:grid-cols-2 md:grid-rows-none  md:h-[96vh] ">
+    <div className="grid gap-2 auto-rows-auto m-4 grid-cols-none md:grid-cols-2 md:grid-rows-none  md:h-[96vh] ">
       <CardFormulario type={type} />
       <div className="flex flex-col items-center h-full gap-16">
         <div className="grid grid-cols-4 w-full text-center">

@@ -93,7 +93,7 @@ export default function FormCreateUser({
 
   return (
     <form
-      className="flex flex-col gap-3 font-medium w-3/4 md:w-2/4"
+      className="flex flex-col gap-3 font-medium w-5/6 sm:w-3/4 md:w-2/4"
       onSubmit={handleSubmit}
     >
         {postChamadoStatus === 'succeeded' && statusPage === 3 && <ModalPrimary pathIcon="/icons/checkGreen.svg" altIcon="Sucesso"  /> }
@@ -139,7 +139,7 @@ export default function FormCreateUser({
         <select
           name="setores"
           id="setores"
-          className="outline outline-1 outlineu-black rounded-sm h-8 px-2 max-w-72  sm:max-w-none bg-white"
+          className="outline outline-1 outlineu-black rounded-sm h-8 px-2 max-w-[80vw] sm:max-w-none bg-white"
           value={setor}
           onChange={(e) => setSetor(e.target.value)}
           required
@@ -147,12 +147,12 @@ export default function FormCreateUser({
           <option></option>
           {setores &&
             setores.map((setor: { id: number; sector: string }) => (
-              <option key={`setor-${setor.id}`} value={setor.id}>
+              <option key={`setor-${setor.id}`}   value={setor.id}>
                 {setor.sector}
               </option>
             ))}
         </select>
-      </label>
+      </label>      
       {acessos && (
         <>
           <label htmlFor="" className="flex flex-col">
@@ -161,7 +161,7 @@ export default function FormCreateUser({
             <select
               name="acessos"
               id="acessos"
-              className="outline outline-1 outlineu-black rounded-sm px-2 h-8"
+              className="outline outline-1 outlineu-black rounded-sm px-2 h-8    bg-white"
               onChange={(e) => handleAcessoSelect(e.target.value)}
             >
               <option></option>

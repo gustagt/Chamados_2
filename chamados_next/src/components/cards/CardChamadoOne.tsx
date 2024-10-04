@@ -5,18 +5,18 @@ import ButtonLogout from "../buttons/ButtonLogout";
 export default function CardChamadoOne({ back, logout }: CardChamadoProps) {
   return (
     <div className="bg-teclado bg-cover h-full rounded">
-      <div className="bg-black-90 h-full grid grid-rows-5 rounded text-white">
+      <div className="bg-black-90 h-full grid grid-rows-3 md:grid-rows-5 rounded text-white">
         {back && (
           <IconLinkNav
-            pathLink="/login"
-            pathIcon="/icons/back-w.svg"
-            altIcon="Voltar a pagina anterior"
-          />
+          pathIcon="/icons/back-w.svg"
+          altIcon="Voltar"
+          pathLink="/chamados/informatica"
+        />
         )}
 
         {logout && <ButtonLogout pathIcon="/icons/logout-w.svg" />}
 
-        <div className="flex flex-wrap md:flex-nowrap basis-full row-start-3 justify-self-center  justify-center md:justify-normal items-center gap-2 ">
+        <div className="flex flex-wrap md:flex-nowrap basis-full row-start-2 md:row-start-3 justify-self-center  justify-center md:justify-normal items-center gap-2 ">
           <Image
           className="w-1/4 "
             src="/images/logoTranscon.png"

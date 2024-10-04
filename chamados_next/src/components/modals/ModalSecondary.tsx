@@ -8,7 +8,7 @@ export default function ModalSecondary({
   
   return (
     <div className="flex justify-center items-center bg-black/50 backdrop-blur-sm fixed inset-0">
-      <div className="flex flex-col bg-white w-3/4 md:w-2/4 lg:w-1/3 xl:w-1/4 2xl:w-1/5  rounded-2xl p-8 gap-14">
+      <div className="flex flex-col bg-white w-11/12 md:w-2/4 lg:w-1/3 xl:w-1/4 2xl:w-1/5  rounded-2xl p-8 gap-14">
         <div className="flex justify-center gap-4">
           <Image
             className=""

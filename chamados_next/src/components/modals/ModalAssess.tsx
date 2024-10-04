@@ -10,10 +10,10 @@ export default function ModalAssess({
   handleStatusPage,
 }: ModalAssessProps) {
   const items = [0, 1, 2, 3, 4];
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const chamado = useAppSelector((state)=> state.chamadoState.chamado)
 
-  const [star, setStar] = useState<number>(0);
+  const [star, setStar] = useState<number>(5);
 
   const [suggestion, setSuggestion] = useState<string>();
 
@@ -35,7 +35,7 @@ export default function ModalAssess({
 
   return (
     <div className="flex justify-center items-center bg-black/50 backdrop-blur-sm fixed inset-0">
-      <div className="flex flex-col bg-white w-3/4 md:w-2/4 lg:w-1/3 xl:w-1/4 2xl:w-1/5  rounded-2xl p-8 gap-14">
+      <div className="flex flex-col bg-white  w-11/12 md:w-2/4 lg:w-1/3 xl:w-1/4 2xl:w-1/5  rounded-2xl p-8 gap-6 sm:gap-14">
         <div className="flex justify-center flex-wrap md:flex-nowrap gap-4">
           <Image
             className="drop-shadow-md"
@@ -54,8 +54,8 @@ export default function ModalAssess({
           {items.map((_, index) => (
             <svg
               key={index}
-              className={`w-16 h-16 text-gray-300 ms-1 hover:cursor-pointer ${
-                star >= index + 1 && "text-[#ffae00]"
+              className={`w-16 h-16  ms-1 hover:cursor-pointer ${
+                star >= index + 1 ? "text-[#ffae00] ": "text-gray-300"
               }`}
               onClick={() => setStar(index + 1)}
               aria-hidden="true"

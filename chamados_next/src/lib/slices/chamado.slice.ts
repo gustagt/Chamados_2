@@ -1,7 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import chamadoService from "../services/chamado.service";
 
-// First, create the thunk
+export const getChamadoId = createAsyncThunk<
+IProtocol,
+  { id: number; token: string | undefined },
+  { rejectValue: string }
+>("chamado/getChamadoId", async (data, thunkAPI) => {
+  const response = await chamadoService.getChamadoId(
+    data.id,
+    data.token
+  );
+
+  if (response.message) return thunkAPI.rejectWithValue(response.message);
+
+  return response;
+});
+
+
 export const postChamado = createAsyncThunk<
   IProtocol,
   { chamado: IProtocol; token: string | undefined },
@@ -90,6 +105,23 @@ const chamadoSlice = createSlice({
     builder.addCase(postReview.rejected, (state, action) => {
       // Add user to the state array
       state.review = undefined;
+      state.loading = "failed";
+      state.error = action.payload;
+    });
+    builder.addCase(getChamadoId.fulfilled, (state, action) =>{
+      state.chamado = action.payload
+      state.loading = "succeeded";
+      state.error = undefined;
+    })
+    builder.addCase(getChamadoId.pending, (state, action) => {
+      // Add user to the state array
+      state.chamado = undefined;
+      state.loading = "pending";
+      state.error = undefined;
+    });
+    builder.addCase(getChamadoId.rejected, (state, action) => {
+      // Add user to the state array
+      state.chamado = undefined;
       state.loading = "failed";
       state.error = action.payload;
     });
