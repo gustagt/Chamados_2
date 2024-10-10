@@ -2,7 +2,7 @@ import Image from "next/image";
 import IconLinkNav from "../links/IconLinkNav";
 import ButtonLogout from "../buttons/ButtonLogout";
 
-export default function CardChamadoOne({ back, logout }: CardChamadoProps) {
+export default function CardChamadoOne({ back, logout, ti }: CardChamadoProps) {
   return (
     <div className="bg-teclado bg-cover h-full rounded">
       <div className="bg-black-90 h-full grid grid-rows-3 md:grid-rows-5 rounded text-white">
@@ -16,16 +16,16 @@ export default function CardChamadoOne({ back, logout }: CardChamadoProps) {
 
         {logout && <ButtonLogout pathIcon="/icons/logout-w.svg" />}
 
-        <div className="flex flex-wrap md:flex-nowrap basis-full row-start-2 md:row-start-3 justify-self-center  justify-center md:justify-normal items-center gap-2 ">
+        <div className="flex flex-wrap w-3/4 lg:flex-nowrap  row-start-2 md:row-start-3 justify-self-center  justify-center md:justify-center items-center gap-2">
           <Image
-          className="w-1/4 "
+          
             src="/images/logoTranscon.png"
             alt="TransCon Logo"
             width={95}
             height={95}
             priority
           />
-          <h1 className="text-6xl font-medium ">CHAMADOS</h1>
+          <h1 className="text-4xl sm md:text-5xl font-medium ">{ti? "CHAMADOS-TI":"CHAMADOS"}</h1>
         </div>
       </div>
     </div>
@@ -35,4 +35,5 @@ export default function CardChamadoOne({ back, logout }: CardChamadoProps) {
 type CardChamadoProps = {
   back?: boolean;
   logout?: boolean;
+  ti?: boolean
 };

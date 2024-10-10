@@ -7,14 +7,38 @@ import CredentialsProvider from "next-auth/providers/credentials";
 const nextAuthOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      name: "client",
+      credentials: {
+        username: { label: "username", type: "text" },
+        password: { label: "password", type: "password" },
+      },
+
+      async authorize(credentials, _req) {
+        const res = await fetch(api + "/login", {
+          method: "POST",
+          body: JSON.stringify(credentials),
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await res.json();
+
+        if (res.ok && data.user) {
+    
+          return data.user;
+        }
+
+        return null;
+      },
+
+    }),
+    CredentialsProvider({
+      name: "operatorTi",
       credentials: {
         username: { label: "username", type: "text" },
         password: { label: "password", type: "password" },
       },
 
       async authorize(credentials, req) {
-        const res = await fetch(api + "/login/", {
+        const res = await fetch(api + "/login/ti", {
           method: "POST",
           body: JSON.stringify(credentials),
           headers: { "Content-Type": "application/json" },
@@ -29,7 +53,8 @@ const nextAuthOptions: NextAuthOptions = {
         return null;
       },
 
-    }),
+    })
+    
   ],
   pages: {
     signIn: "/login",
@@ -37,6 +62,7 @@ const nextAuthOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       user && (token.user = user);
+      user && (token.role = user.role);
       return token;
     },
     async session({ session, token }) {
@@ -45,11 +71,11 @@ const nextAuthOptions: NextAuthOptions = {
     },
   },
   jwt: {
-    maxAge: 1 * 3 * 60 * 60,
+    maxAge: 6 * 24 * 60 * 60,
   },
   session: {
     strategy: "jwt",
-    maxAge: 1 * 3 * 60 * 60,
+    maxAge: 6 * 24 * 60 * 60,
   },
 };
 

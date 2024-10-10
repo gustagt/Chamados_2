@@ -1,6 +1,7 @@
-export default function IconCode({ width, height, color }: IconCodeProps) {
+export default function IconCode({ className,width, height, color }: IconCodeProps) {
   return (
     <svg
+    className={className}
       xmlns="http://www.w3.org/2000/svg"
       width={width}
       height={height}
@@ -16,6 +17,7 @@ export default function IconCode({ width, height, color }: IconCodeProps) {
 }
 
 type IconCodeProps = {
+  className?:string;
   width: number;
   height: number;
   color: string;

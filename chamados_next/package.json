@@ -13,7 +13,7 @@
     "@types/react-redux": "^7.1.33",
     "activedirectory2": "^2.2.0",
     "dotenv": "^16.4.5",
-    "jose": "^5.8.0",
+    "jose": "^5.9.3",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
     "react": "^18",
