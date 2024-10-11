@@ -17,8 +17,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-
-
       <NextAuthSessionProvider>
         <body className={inter.className}>{children}</body>
       </NextAuthSessionProvider>

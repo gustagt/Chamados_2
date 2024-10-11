@@ -11,11 +11,6 @@ interface PrivateLayoutProps{
 }
 
 export default async function PrivateLayout({children}: PrivateLayoutProps) {
-    const session = await getServerSession(nextAuthOptions)
-
-    if(session?.user.role === "operatorTi"){
-        redirect('/chamados')
-    }
 
     return <>{children}</>
 }

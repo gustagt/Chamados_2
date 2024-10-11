@@ -13,6 +13,9 @@ export default withAuth(
         if(req.nextUrl.pathname.startsWith('/chamados')){
           return token?.role === "client"
         }
+        if(req.nextUrl.pathname.startsWith('/dashboard')){
+          return token?.role === "ti"
+        }
         return false
       },
       
@@ -24,5 +27,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/chamados/:path*"],
+  matcher: ["/chamados/:path*","/dashboard/:path*"],
 };

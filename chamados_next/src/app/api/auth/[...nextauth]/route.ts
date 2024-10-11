@@ -1,13 +1,15 @@
 import { api } from "@/lib/utils/config";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { signIn } from 'next-auth/react';
 
 
 
 const nextAuthOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "client",
+      id: "client",
+      name: "Login Cliente",
       credentials: {
         username: { label: "username", type: "text" },
         password: { label: "password", type: "password" },
@@ -30,8 +32,10 @@ const nextAuthOptions: NextAuthOptions = {
       },
 
     }),
+
     CredentialsProvider({
-      name: "operatorTi",
+      id:'operatorTi',
+      name: "Acesso da Ti",
       credentials: {
         username: { label: "username", type: "text" },
         password: { label: "password", type: "password" },
@@ -57,7 +61,7 @@ const nextAuthOptions: NextAuthOptions = {
     
   ],
   pages: {
-    signIn: "/login",
+    signIn: "/login",  
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -69,6 +73,7 @@ const nextAuthOptions: NextAuthOptions = {
       session.user = token.user as any;
       return session;
     },
+   
   },
   jwt: {
     maxAge: 6 * 24 * 60 * 60,

@@ -1,11 +1,25 @@
+"use client";
+import ButtonLogout from "@/components/buttons/ButtonLogout";
 import IconArrowPage from "@/components/Icons/IconArrowPage";
 import IconCode from "@/components/Icons/IconCode";
 import IconSearch from "@/components/Icons/IconSearch";
 import IconTwoArrowPage from "@/components/Icons/IconTwoArrowPage";
 import IconX from "@/components/Icons/IconX";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Page() {
+  const [visibleRows, setVisibleRows] = useState<{ [key: number]: boolean }>(
+    {}
+  );
+
+  const toggleVisibility = (rowId: number) => {
+    setVisibleRows((prev) => ({
+      ...prev,
+      [rowId]: !prev[rowId], // Alterna o estado da linha específica
+    }));
+  };
+
   return (
     <div className="flex flex-col">
       <div className="bg-teclado bg-cover h-fit ">
@@ -30,26 +44,32 @@ export default function Page() {
               />
             </label>
             <div className="flex  flex-wrap md:flex-wrap gap-6  items-center text-[#D9D9D9] font-medium">
-              <label htmlFor="" className="flex items-baseline text-lg gap-2">
-                <input type="checkbox" name="" id="" />
+              <label
+                htmlFor="open"
+                className="flex items-baseline text-lg gap-2"
+              >
+                <input type="checkbox" name="open" id="open" />
                 Aberto
               </label>
-              <label htmlFor="" className="flex  items-baseline text-lg gap-2">
-                <input type="checkbox" name="" id="" />
+              <label
+                htmlFor="inProcess"
+                className="flex  items-baseline text-lg gap-2"
+              >
+                <input type="checkbox" name="inProcess" id="inProcess" />
                 Em Atendimento
               </label>
-              <label htmlFor="" className="flex items-baseline text-lg gap-2">
-                <input type="checkbox" name="" id="" />
+              <label
+                htmlFor="closed"
+                className="flex items-baseline text-lg gap-2"
+              >
+                <input type="checkbox" name="closed" id="closed" />
                 Finalizado
               </label>
             </div>
           </div>
           <div className="flex w-full md:w-auto gap-12 items-center justify-between  ">
-            <h1 className="text-2xl">DASHBOARD</h1>
-            <div className="flex flex-col items-center">
-              <IconX width={36} height={36} color="white" />
-              <span>Sair</span>
-            </div>
+            <h1 className="text-2xl font-semibold">DASHBOARD</h1>
+            <ButtonLogout path="/login-ti" />
           </div>
         </nav>
       </div>
@@ -100,6 +120,7 @@ export default function Page() {
                   />
                   <Image
                     className="rotate-90 cursor-pointer"
+                    onClick={() => toggleVisibility(1)}
                     src={"/icons/arrow.png"}
                     width={20}
                     height={20}
@@ -116,9 +137,15 @@ export default function Page() {
               </td>
             </tr>
             <tr>
-              
-              {true ? <td colSpan={8} className="min-h-2 text-start ">
-                <div className="flex p-6 gap-12">
+              <td colSpan={9} className="h-2">
+                <div
+                  id="myElement"
+                  className={`flex gap-12 text-start overflow-hidden transition-all duration-200 ease-in-out ${
+                    visibleRows[1]
+                      ? "opacity-100 max-h-screen  m-6  "
+                      : "opacity-0 max-h-0 m-0"
+                  }`}
+                >
                   <div className="flex flex-col items-start ">
                     <span className="text-[#848282]">Observações:</span>
                     <span>Gerência de Tecnologia da Informação</span>
@@ -151,7 +178,7 @@ export default function Page() {
                     <span>Gerência de Tecnologia da Informação:</span>
                   </div>
                 </div>
-              </td>:<td className="min-h-2 flex text-start gap-6" colSpan={4}></td>}
+              </td>
             </tr>
             <tr className="bg-[#F4F4F4] border border-[#CBCBCB] shadow-md h-10">
               <td>500</td>
@@ -252,8 +279,18 @@ export default function Page() {
         <span> 1-10 de 468</span>
         <IconTwoArrowPage color="white" height={16} width={16} />
         <IconArrowPage color="white" height={16} width={16} />
-        <IconArrowPage className="rotate-180" color="white" height={16} width={16} />
-        <IconTwoArrowPage className="rotate-180" color="white" height={16} width={16} />
+        <IconArrowPage
+          className="rotate-180"
+          color="white"
+          height={16}
+          width={16}
+        />
+        <IconTwoArrowPage
+          className="rotate-180"
+          color="white"
+          height={16}
+          width={16}
+        />
       </div>
     </div>
   );

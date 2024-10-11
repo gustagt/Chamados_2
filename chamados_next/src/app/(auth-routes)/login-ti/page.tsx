@@ -19,7 +19,7 @@ export default function Page() {
     const result = await signIn("operatorTi", {
       username,
       password,
-      redirect: false,
+      redirect:false,
     });
 
     if (result?.error) {
@@ -27,7 +27,7 @@ export default function Page() {
       return;
     }
 
-    router.replace("/chamados");
+    router.replace("/dashboard");
   }
 
   return (
@@ -46,6 +46,7 @@ export default function Page() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             maxLength={45}
+            required
           />
           <label htmlFor="password" className="font-semibold">
             Senha:
@@ -58,6 +59,8 @@ export default function Page() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             maxLength={45}
+            required
+
           />
           <div className="flex mt-7 justify-between gap-3 flex-wrap 2xl:flex-nowrap ">
             <ButtonPrimary text="Entrar"></ButtonPrimary>

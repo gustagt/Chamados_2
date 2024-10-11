@@ -3,9 +3,9 @@ import { signIn } from "next-auth/react";
 
 import { SyntheticEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import  ButtonPrimary  from "@/components/buttons/ButtonPrimary";
-import  LinkPrimary  from "@/components/links/LinkPrimary";
-import  CardChamadoOne  from "@/components/cards/CardChamadoOne";
+import ButtonPrimary from "@/components/buttons/ButtonPrimary";
+import LinkPrimary from "@/components/links/LinkPrimary";
+import CardChamadoOne from "@/components/cards/CardChamadoOne";
 
 export default function Page() {
   const [username, setUsername] = useState<string>("");
@@ -16,10 +16,11 @@ export default function Page() {
   async function handleSubmit(event: SyntheticEvent) {
     event.preventDefault();
 
-    const result = await signIn("credentials", {
+    const result = await signIn("client", {
       username,
       password,
       redirect: false,
+      
     });
 
     if (result?.error) {
