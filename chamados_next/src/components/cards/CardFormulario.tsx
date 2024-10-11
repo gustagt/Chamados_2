@@ -67,15 +67,14 @@ export default function CardFormulario({ type }: CardProps) {
       <div className="bg-black-90  sm:h-full flex flex-col items-center rounded text-white gap-12 sm:gap-24 pb-16 md:pb-0">
         <div className="grid grid-cols-4 w-full text-center items-center">
           <IconLinkNav
-            pathIcon="/icons/back-w.svg"
-            altIcon="Voltar"
+            
             pathLink="/chamados/informatica"
           />
           <h2 className="col-start-2 col-span-2 text-3xl  pt-16">
             Dados do chamado
           </h2>
           <ButtonLogout
-            pathIcon="/icons/logout-w.svg"
+            path="/login"
             className="block md:hidden"
           />
         </div>

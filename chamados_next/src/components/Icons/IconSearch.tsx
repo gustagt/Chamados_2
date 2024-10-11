@@ -1,6 +1,7 @@
-export default function IconSearch({ width, height, color }: IconSearchProps) {
+export default function IconSearch({ width, height, color,className }: IconSearchProps) {
   return (
     <svg
+    className={className}
       xmlns="http://www.w3.org/2000/svg"
       width={width}
       height={height}
@@ -19,4 +20,5 @@ type IconSearchProps = {
   width: number;
   height: number;
   color: string;
+  className?: string
 };

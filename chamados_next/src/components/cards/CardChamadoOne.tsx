@@ -8,13 +8,12 @@ export default function CardChamadoOne({ back, logout, ti }: CardChamadoProps) {
       <div className="bg-black-90 h-full grid grid-rows-3 md:grid-rows-5 rounded text-white">
         {back && (
           <IconLinkNav
-          pathIcon="/icons/back-w.svg"
-          altIcon="Voltar"
+          
           pathLink="/chamados/informatica"
         />
         )}
 
-        {logout && <ButtonLogout pathIcon="/icons/logout-w.svg" />}
+        {logout && <ButtonLogout path="/login" />}
 
         <div className="flex flex-wrap w-3/4 lg:flex-nowrap  row-start-2 md:row-start-3 justify-self-center  justify-center md:justify-center items-center gap-2">
           <Image

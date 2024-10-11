@@ -21,11 +21,10 @@ export default function Page() {
         <div className="bg-black-90 h-full flex flex-col gap-8 rounded text-white">
           <div className="flex justify-between text-center">
             <IconLinkNav
-              pathIcon="/icons/back-w.svg"
-              altIcon="Voltar"
+              
               pathLink="/chamados"
             />
-            <ButtonLogout pathIcon="/icons/logout-w.svg" />
+            <ButtonLogout path="/login" />
           </div>
           <div>
             <h2 className="text-4xl font-medium text-white text-center p-4">

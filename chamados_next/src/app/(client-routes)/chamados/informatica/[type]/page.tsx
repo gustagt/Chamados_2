@@ -63,7 +63,7 @@ export default function Page({ params }: { params: { type: number } }) {
           </h2>
 
           <ButtonLogout
-            pathIcon="/icons/logout.svg"
+            path="/login"
             className="hidden md:block"
           />
         </div>

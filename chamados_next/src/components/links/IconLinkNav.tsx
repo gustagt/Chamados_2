@@ -1,21 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
+import IconBack from "../Icons/IconBack";
 
-export default function IconLinkNav ({pathIcon, altIcon,pathLink}: IconLinkNavProps) {
-    return <Link href={pathLink} className="self-start justify-self-start  p-4 text-center hover:cursor-pointer">
-    <Image
-    className="p-1"
-      src={pathIcon}
-      alt={altIcon}
-      width={42}
-      height={42}
-    ></Image>
+export default function IconLinkNav ({pathLink}: IconLinkNavProps) {
+    return <Link href={pathLink} className="flex flex-col self-start justify-self-start gap-2 p-4 text-center hover:cursor-pointer ">
+    <IconBack color="white" width={42} height={42}/>
     <span>Voltar</span>
   </Link>
 }
 
 type IconLinkNavProps ={
-    pathIcon: string,
+ 
     pathLink: string
-    altIcon: string
 }
