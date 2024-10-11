@@ -14,9 +14,10 @@ class ProtocolService {
     });
     return resp(200, protocols);
   }
+
   async getId(id: string) {
     const protocol = await this.model.findByPk(id, {
-      include: ["setor", "Origem", "status", "atendimento", "user"],
+      include: ["sector", "origin", "status", "service", "user"],
     });
     return resp(200, protocol);
   }

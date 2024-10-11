@@ -16,14 +16,15 @@ import reviewRouter from "./review.router";
 
 
 const router = Router()
-const  authControl = new AuthController();
+const authControl = new AuthController();
 
 router.use(loginRouter)
 router.use(authControl.authenticate.bind(authControl))
+
+router.use(protocolRouter)
 router.use(accessRouter)
 router.use(serviceRouter)
 router.use(systemRouter)
-router.use(protocolRouter)
 router.use(originRouter)
 router.use(sectorRouter)
 router.use(statusRouter)

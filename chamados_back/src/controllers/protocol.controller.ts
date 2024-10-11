@@ -18,11 +18,13 @@ class ProtocolController {
   async getId(req: Request, res: Response, next: NextFunction) {
     try {
       const { status, data } = await this.service.getId(req.params.id);
+      if(!data) return res.status(200).json({message: "Protocolo não encontrado."});
       res.status(status).json(data);
     } catch (error) {
       next(error);
     }
   }
+
 
   async post(req: Request, res: Response, next: NextFunction) {
     try {
