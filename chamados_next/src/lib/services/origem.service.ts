@@ -1,13 +1,13 @@
 import { api, requestConfig } from "../utils/config";
 
 
-const getSetores = async (token?: string, role?:string) => {
+const getOrigens = async (token?: string, role?:string) => {
     
   const config = requestConfig("GET", null, token, null, role);
 
   try {
    
-    const res = await fetch(`${api}/setores`, config).then(
+    const res = await fetch(`${api}/origens`, config).then(
       (res) => res.json()
     );
 
@@ -18,10 +18,10 @@ const getSetores = async (token?: string, role?:string) => {
 };
 
 
-const setorService = {
+const origemService = {
   
-  getSetores,
+    getOrigens,
 
 };
 
-export default setorService;
+export default origemService;

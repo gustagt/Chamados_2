@@ -46,7 +46,7 @@ class ProtocolController {
 
         res.status(status).json(data);
       } else {
-        res.status(404).json(respE("Usuário não encontrado"));
+        res.status(404).json(respE("Protocolo não encontrado"));
       }
     } catch (error) {
       next(error);
@@ -60,7 +60,7 @@ class ProtocolController {
         const { status, data } = await this.service.delete(chamado);
         res.status(status).json(data);
       } else {
-        res.status(404).json(respE("Usuário não encontrado"));
+        res.status(404).json(respE("Protocolo não encontrado"));
       }
     } catch (error) {
       next(error);

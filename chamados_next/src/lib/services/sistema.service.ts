@@ -1,6 +1,6 @@
 import { api, requestConfig } from "../utils/config";
 
-const getSistemas = async (token?: string) => {
+const getSistemas = async (token?: string, role?: string) => {
   const config = requestConfig("GET", null, token);
 
   try {

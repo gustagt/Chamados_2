@@ -4,9 +4,9 @@ import sistemaService from "../services/sistema.service";
 // First, create the thunk
 export const getSistemas = createAsyncThunk<
   [],
-  string | undefined,
+  {token: string | undefined; role?: string},
   { rejectValue: string }
->("sistema/getSistemas", async (token: string | undefined, thunkAPI) => {
+>("sistema/getSistemas", async ({token}, thunkAPI) => {
   const response = await sistemaService.getSistemas(token);
   if (response.message) return thunkAPI.rejectWithValue(response.message);
 

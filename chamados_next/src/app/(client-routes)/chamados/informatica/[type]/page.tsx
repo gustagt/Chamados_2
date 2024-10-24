@@ -22,8 +22,8 @@ export default function Page({ params }: { params: { type: number } }) {
   const initialized = useRef(false);
   useEffect(() => {
     if (!initialized.current && status === "authenticated") {
-      store.dispatch(getSetores(session?.user.token));
-      store.dispatch(getSistemas(session?.user.token));
+      store.dispatch(getSetores({token: session?.user.token}));
+      store.dispatch(getSistemas({token: session?.user.token}));
       store.dispatch(
         getAtendimentoOrigemID({ origem: type, token: session?.user.token })
       );

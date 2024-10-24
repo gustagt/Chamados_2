@@ -1,8 +1,19 @@
 
 import { api, requestConfig } from "../utils/config";
 
-const getChamadoId = async (id:number, token?: string) => {
-  const config = requestConfig("GET", null, token);
+const getChamados = async ( token?: string) => {
+  const config = requestConfig("GET", null, token,null,"ti");
+
+
+  try {
+    const res = await fetch(`${api}/chamados`, config).then((res)=>res.json())
+    return res
+  } catch (error) {
+    console.error(error);
+  }
+}
+const getChamadoId = async (id:number, token?: string, role?: string) => {
+  const config = requestConfig("GET", null, token, null, role);
 
   try {
     const res = await fetch(`${api}/chamados/${id}`, config).then((res)=>res.json())
@@ -17,6 +28,20 @@ const postChamado = async (chamado: IProtocol, token?: string) => {
 
   try {
     const res = await fetch(`${api}/chamados`, config).then((res) =>
+      res.json()
+    );
+
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deleteChamado = async (id: number, token?: string) => {
+  const config = requestConfig("DELETE", null ,token,null,"ti");
+
+  try {
+    const res = await fetch(`${api}/chamados/${id}`, config).then((res) =>
       res.json()
     );
 
@@ -44,7 +69,9 @@ const postReview = async (review: IReview, token?: string) => {
 const chamadoService = {
     postChamado,
     postReview,
-    getChamadoId
+    getChamadoId,
+    getChamados,
+    deleteChamado
 };
 
 export default chamadoService;

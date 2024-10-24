@@ -3,9 +3,11 @@ export default function IconTwoArrowPage({
   height,
   color,
   className,
+  onClick
 }: IconTwoArrowPageProps) {
   return (
     <svg
+    onClick={()=> onClick()}
       className={className}
       xmlns="http://www.w3.org/2000/svg"
       width={width}
@@ -26,4 +28,5 @@ type IconTwoArrowPageProps = {
   width: number;
   height: number;
   color: string;
+  onClick: Function
 };

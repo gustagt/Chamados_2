@@ -1,6 +1,7 @@
-export default function IconArrowPage({ width, height, color, className }: IconArrowPageProps) {
+export default function IconArrowPage({ width, height, color, className, onClick }: IconArrowPageProps) {
   return (
-    <svg
+    <svg 
+    onClick={() => onClick()}
     className={className}
       xmlns="http://www.w3.org/2000/svg"
       width={width}
@@ -21,4 +22,5 @@ type IconArrowPageProps = {
   height: number;
   color: string;
   className?: string
+  onClick: Function
 };

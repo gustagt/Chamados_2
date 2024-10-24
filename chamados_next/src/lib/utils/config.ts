@@ -1,6 +1,6 @@
 export const api = process.env.NEXT_PUBLIC_API_HOST || "/";
 
-export const requestConfig = (method:string, data:any, token?:string, image=null) => {
+export const requestConfig = (method:string, data:any, token?:string, image=null, role?:string) => {
   let config: RequestInit;
 
   if (image) {
@@ -34,6 +34,14 @@ export const requestConfig = (method:string, data:any, token?:string, image=null
       Authorization: token,
     };
   }
+
+  if (role) {
+    config.headers = {
+      ...config.headers, // Preserva os headers existentes
+      role: 'ti',
+    };
+  }
+
 
   return config;
 };

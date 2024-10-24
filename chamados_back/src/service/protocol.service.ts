@@ -11,6 +11,7 @@ class ProtocolService {
   async getAll() {
     const protocols = await this.model.findAll({
       include: ["sector", "origin", "status", "service", "user"],
+      order: [['id', 'DESC']]
     });
     return resp(200, protocols);
   }
@@ -55,16 +56,16 @@ class ProtocolService {
 
       return resp(200, protocol);
     } catch (error) {
-      return resp(500, { message: "Erro ao atualizar o usuário", error });
+      return resp(500, { message: "Erro ao atualizar o protocol", error });
     }
   }
 
   async delete(protocol: Protocol) {
     try {
       await protocol.destroy();
-      return resp(200, { message: "Usuário deletado com sucesso" });
+      return resp(200, { sucess: "Protocol deletado com sucesso" });
     } catch (error) {
-      return resp(500, { message: "Erro ao deletar o usuário", error });
+      return resp(500, { message: "Erro ao deletar o protocol", error });
     }
   }
 }

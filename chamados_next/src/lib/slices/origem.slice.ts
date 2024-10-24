@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import setorService from "../services/setor.service";
+import origemService from "../services/origem.service";
 
 // First, create the thunk
-export const getSetores = createAsyncThunk<
+export const getOrigens = createAsyncThunk<
 [],
 {token: string | undefined; role?: string} ,
 { rejectValue: string }
 >(
-  "setor/getSetores",
+  "origem/getOrigens",
   async ({token, role}, thunkAPI) => {
-    const response = await setorService.getSetores(token,role);
+    const response = await origemService.getOrigens(token,role);
 
     if (response.message) return thunkAPI.rejectWithValue(response.message);
 
@@ -17,54 +17,54 @@ export const getSetores = createAsyncThunk<
   }
 );
 
-interface SetoresState {
-  setores: [];
+interface OrigensState {
+  origens: [];
   loading: "idle" | "pending" | "succeeded" | "failed";
   error?: string;
 }
 
 const initialState = {
-  setores: [],
+  origens: [],
   loading: "idle",
   error: undefined,
-} satisfies SetoresState as SetoresState;
+} satisfies OrigensState as OrigensState;
 
 // Then, handle actions in your reducers:
-const setorSlice = createSlice({
-  name: "setor",
+const origemSlice = createSlice({
+  name: "origem",
   initialState,
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
     reset: (state) => {
-      state.setores = [];
+      state.origens = [];
       state.loading = "idle";
       state.error = undefined;
     },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(getSetores.fulfilled, (state, action) => {
+    builder.addCase(getOrigens.fulfilled, (state, action) => {
       // Add user to the state array
-      state.setores = action.payload;
+      state.origens = action.payload;
       state.loading = "succeeded";
       state.error = undefined;
 
     });
-    builder.addCase(getSetores.pending, (state, action) => {
+    builder.addCase(getOrigens.pending, (state, action) => {
       // Add user to the state array
-      state.setores = [];
+      state.origens = [];
       state.loading = "pending";
       state.error = undefined;
 
     });
-    builder.addCase(getSetores.rejected, (state, action) => {
+    builder.addCase(getOrigens.rejected, (state, action) => {
       // Add user to the state array
-      state.setores = [];
+      state.origens = [];
       state.loading = "failed";
       state.error = action.payload;
     });
   },
 });
 
-export const { reset } = setorSlice.actions;
-export default setorSlice.reducer;
+export const { reset } = origemSlice.actions;
+export default origemSlice.reducer;

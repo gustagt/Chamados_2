@@ -1,18 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import acessoService from "../services/acesso.service";
 
-
 // First, create the thunk
-export const getAcessos = createAsyncThunk<[], string | undefined, {rejectValue: string}>(
-  "acesso/getAcessos",
-  async (token, thunkAPI) => {
-    const response = await acessoService.getAcessos(token);
+export const getAcessos = createAsyncThunk<
+  [],
+  string | undefined,
+  { rejectValue: string }
+>("acesso/getAcessos", async (token, thunkAPI) => {
+  const response = await acessoService.getAcessos(token);
 
-    if (response.message)return thunkAPI.rejectWithValue(response.message)
+  if (response.message) return thunkAPI.rejectWithValue(response.message);
 
-    return response;
-  }
-);
+  return response;
+});
 
 interface AcessosState {
   acessos: [];

@@ -1,15 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import setorService from "../services/setor.service";
+import origemService from "../services/origem.service";
+import statusService from "../services/status.service";
 
 // First, create the thunk
-export const getSetores = createAsyncThunk<
+export const getStatus = createAsyncThunk<
 [],
 {token: string | undefined; role?: string} ,
 { rejectValue: string }
 >(
-  "setor/getSetores",
+  "status/getStatus",
   async ({token, role}, thunkAPI) => {
-    const response = await setorService.getSetores(token,role);
+    const response = await statusService.getStatus(token,role);
 
     if (response.message) return thunkAPI.rejectWithValue(response.message);
 
@@ -17,54 +18,54 @@ export const getSetores = createAsyncThunk<
   }
 );
 
-interface SetoresState {
-  setores: [];
+interface StatusState {
+  status: [];
   loading: "idle" | "pending" | "succeeded" | "failed";
   error?: string;
 }
 
 const initialState = {
-  setores: [],
+  status: [],
   loading: "idle",
   error: undefined,
-} satisfies SetoresState as SetoresState;
+} satisfies StatusState as StatusState;
 
 // Then, handle actions in your reducers:
-const setorSlice = createSlice({
-  name: "setor",
+const statusSlice = createSlice({
+  name: "status",
   initialState,
   reducers: {
     // standard reducer logic, with auto-generated action types per reducer
     reset: (state) => {
-      state.setores = [];
+      state.status = [];
       state.loading = "idle";
       state.error = undefined;
     },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(getSetores.fulfilled, (state, action) => {
+    builder.addCase(getStatus.fulfilled, (state, action) => {
       // Add user to the state array
-      state.setores = action.payload;
+      state.status = action.payload;
       state.loading = "succeeded";
       state.error = undefined;
 
     });
-    builder.addCase(getSetores.pending, (state, action) => {
+    builder.addCase(getStatus.pending, (state, action) => {
       // Add user to the state array
-      state.setores = [];
+      state.status = [];
       state.loading = "pending";
       state.error = undefined;
 
     });
-    builder.addCase(getSetores.rejected, (state, action) => {
+    builder.addCase(getStatus.rejected, (state, action) => {
       // Add user to the state array
-      state.setores = [];
+      state.status = [];
       state.loading = "failed";
       state.error = action.payload;
     });
   },
 });
 
-export const { reset } = setorSlice.actions;
-export default setorSlice.reducer;
+export const { reset } = statusSlice.actions;
+export default statusSlice.reducer;

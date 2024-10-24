@@ -4,12 +4,13 @@ import atendimentoService from "../services/atendimento.service";
 // First, create the thunk
 export const getAtendimentoOrigemID = createAsyncThunk<
   [],
-  { origem: number; token: string | undefined },
+  { origem: number; token: string | undefined, role?: string },
   { rejectValue: string }
 >("atendimento/getAtendimentoOrigemID", async (data, thunkAPI) => {
   const response = await atendimentoService.getAtendiemntoOrigemID(
     data.origem,
-    data.token
+    data.token,
+    data.role
   );
 
   if (response.message) return thunkAPI.rejectWithValue(response.message);
