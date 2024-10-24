@@ -15,10 +15,14 @@ export const getChamados = createAsyncThunk<
 
 export const getChamadoId = createAsyncThunk<
   IProtocol,
-  { id: number; token: string | undefined; role: string | undefined  },
+  { id: number; token: string | undefined; role?: string },
   { rejectValue: string }
 >("chamado/getChamadoId", async (data, thunkAPI) => {
-  const response = await chamadoService.getChamadoId(data.id, data.token, data.role);
+  const response = await chamadoService.getChamadoId(
+    data.id,
+    data.token,
+    data.role
+  );
 
   if (response.message) return thunkAPI.rejectWithValue(response.message);
 
@@ -37,17 +41,28 @@ export const postChamado = createAsyncThunk<
   return response;
 });
 
+export const putChamado = createAsyncThunk<
+  IProtocol,
+  { chamado: IProtocol; token: string | undefined; role?: string },
+  { rejectValue: string }
+>("chamado/putChamado", async ({ chamado, token, role }, thunkAPI) => {
+  const response = await chamadoService.putChamado(chamado, token, role);
+
+  if (response.message) return thunkAPI.rejectWithValue(response.message);
+
+  return response;
+});
+
 export const deleteChamado = createAsyncThunk<
   number,
-  { id: number; token: string | undefined},
+  { id: number; token: string | undefined },
   { rejectValue: string }
 >("chamado/deleteChamado", async ({ id, token }, thunkAPI) => {
-  const response = await chamadoService.deleteChamado(id,token);
+  const response = await chamadoService.deleteChamado(id, token);
 
-  if(response.message) return thunkAPI.rejectWithValue(response.message)
+  if (response.message) return thunkAPI.rejectWithValue(response.message);
 
-    return id
-    
+  return id;
 });
 
 export const postReview = createAsyncThunk<
@@ -164,8 +179,9 @@ const chamadoSlice = createSlice({
       state.error = action.payload;
     });
     builder.addCase(deleteChamado.fulfilled, (state, action) => {
-    console.log(state.chamados)
-      state.chamados = state.chamados.filter((chamado) => chamado.id !== action.payload);
+      state.chamados = state.chamados.filter(
+        (chamado) => chamado.id !== action.payload
+      );
       state.loading = "succeeded";
       state.error = undefined;
     });
@@ -174,6 +190,21 @@ const chamadoSlice = createSlice({
       state.error = undefined;
     });
     builder.addCase(deleteChamado.rejected, (state, action) => {
+      state.loading = "failed";
+      state.error = action.payload;
+    });
+    builder.addCase(putChamado.fulfilled, (state, action) => {
+      state.chamado = action.payload
+      state.loading = "succeeded";
+      state.error = undefined;
+    });
+    builder.addCase(putChamado.pending, (state, action) => {
+      state.chamado = undefined
+      state.loading = "pending";
+      state.error = undefined;
+    });
+    builder.addCase(putChamado.rejected, (state, action) => {
+      state.chamado = undefined
       state.loading = "failed";
       state.error = action.payload;
     });

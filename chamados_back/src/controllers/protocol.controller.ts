@@ -40,9 +40,10 @@ class ProtocolController {
   async put(req: Request, res: Response, next: NextFunction) {
     try {
       const { data: chamado } = await this.service.getId(req.params.id);
+      const form: IProtocol = req.body;
 
       if (chamado instanceof Protocol) {
-        const { status, data } = await this.service.put(chamado, req.body);
+        const { status, data } = await this.service.put(chamado, form);
 
         res.status(status).json(data);
       } else {

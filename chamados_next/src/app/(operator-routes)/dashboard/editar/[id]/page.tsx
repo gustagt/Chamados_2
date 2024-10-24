@@ -1,20 +1,20 @@
 "use client";
 import ButtonLogout from "@/components/buttons/ButtonLogout";
-import IconX from "@/components/Icons/IconX";
 import LabelFormOperator from "@/components/label/LabelFormOperator";
 import LabelFormTextAreaOperator from "@/components/label/LabelFormTextAreaOperator";
 import IconLinkNav from "@/components/links/IconLinkNav";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
-import { getChamadoId, getChamados } from "@/lib/slices/chamado.slice";
+import { getChamadoId, getChamados, putChamado } from "@/lib/slices/chamado.slice";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { SyntheticEvent, useEffect, useRef, useState } from "react";
 import LabelFormSelectOperator from "./../../../../../components/label/LabelFormSelectOperator";
 import { getSetores } from "@/lib/slices/setor.slice";
 import { getAtendimentoOrigemID } from "@/lib/slices/atendimento.slice";
 import { getOrigens } from "@/lib/slices/origem.slice";
 import { getStatus } from "@/lib/slices/status.slice";
-import status from '../../../../../lib/slices/status.slice';
+import Link from "next/link";
+
 
 export default function Page() {
   const initialized = useRef(false);
@@ -59,28 +59,53 @@ export default function Page() {
       setOrigin(String(protocol.idOrigin));
       setSector(String(protocol.idSector));
       setService(String(protocol.idService));
-      setDetails(protocol.details);
-      setObservation(protocol.observation);
-      setEmail(protocol.email);
+      setDetails(protocol.details || "");
+      setObservation(protocol.observation || "");
+      setEmail(protocol.email || "");
       setStatus(String(protocol.idStatus));
     }
   }, [protocol]);
 
-  const [origin, setOrigin] = useState<string>();
-  const [name, setName] = useState<string>();
-  const [sector, setSector] = useState<string>();
-  const [service, setService] = useState<string>();
-  const [details, setDetails] = useState<string>();
-  const [observation, setObservation] = useState<string>();
-  const [email, setEmail] = useState<string>();
-  const [status, setStatus] = useState<string>();
+  const [name, setName] = useState<string>("");
+  const [origin, setOrigin] = useState<string>("");
+  const [sector, setSector] = useState<string>("");
+  const [service, setService] = useState<string>("");
+  const [details, setDetails] = useState<string>("");
+  const [observation, setObservation] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
 
   
   useEffect(()=>{
     if(origin){
       dispatch(getAtendimentoOrigemID({origem: Number(origin), token: session?.user.token, role: session?.user.role }))
     }
-  },[origin])
+  },[origin,dispatch,session])
+
+  const handleSubmit = (e: SyntheticEvent ) =>{
+    e.preventDefault()
+
+
+
+    
+    const protocolForm:IProtocol = {
+      ... protocol as IProtocol,
+      name,
+      idOrigin: Number(origin),
+      idSector: Number(sector),
+      idService: Number(service),
+      idStatus: Number(status),
+      details,
+      observation,
+      email,
+
+      // idSystem: Number(system),
+    }
+
+
+
+    dispatch(putChamado({chamado: protocolForm, token: session?.user.token, role: session?.user.role }))
+  }
 
   return (
     <div className="flex flex-col gap-10 md:gap-20">
@@ -103,7 +128,7 @@ export default function Page() {
         </nav>
       </div>
       <form
-        action=""
+        onSubmit={handleSubmit}
         className="flex flex-col self-center font-medium gap-2 w-5/6 md:w-4/6 lg:w-3/6 xl:w-2/6"
       >
         <div className="flex flex-wrap gap-2 md:gap-6 md:flex-nowrap">
@@ -111,12 +136,14 @@ export default function Page() {
             label="Solicitante"
             value={name}
             setValue={setName}
+            required
           />
           <LabelFormSelectOperator
             label="Origem"
             value={origin}
             setValue={setOrigin}
             array={origens}
+            required
           />
         </div>
         <div className="flex flex-wrap gap-2 md:gap-6 md:flex-nowrap">
@@ -125,12 +152,14 @@ export default function Page() {
             value={sector}
             setValue={setSector}
             array={setores}
+            required
           />
           {atendimentos && <LabelFormSelectOperator
             label="Descrição"
             value={service}
             setValue={setDetails}
             array={atendimentos}
+            required
           />}
         </div>
         <LabelFormTextAreaOperator
@@ -156,11 +185,12 @@ export default function Page() {
             value={status}
             setValue={setStatus}
             array={statusArray}
+            required
           />
           <div className="flex self-end w-full justify-between gap-2">
-            <button className="border border-[#313131] rounded w-full py-1">
+            <Link href="/dashboard" className="border border-[#313131] rounded w-full py-1 text-center">
               Cancelar
-            </button>
+            </Link>
             <button className="border bg-[#313131] rounded text-white w-full py-1">
               Salvar
             </button>

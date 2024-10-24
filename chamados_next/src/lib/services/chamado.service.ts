@@ -37,6 +37,21 @@ const postChamado = async (chamado: IProtocol, token?: string) => {
   }
 };
 
+const putChamado = async (protocol: IProtocol, token?:string, role?: string) =>{
+  const config = requestConfig("PUT", protocol ,token,null,role);
+
+  try {
+    const res = await fetch(`${api}/chamados/${protocol.id}`, config).then((res) =>
+      res.json()
+    );
+
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
 const deleteChamado = async (id: number, token?: string) => {
   const config = requestConfig("DELETE", null ,token,null,"ti");
 
@@ -71,7 +86,8 @@ const chamadoService = {
     postReview,
     getChamadoId,
     getChamados,
-    deleteChamado
+    deleteChamado,
+    putChamado
 };
 
 export default chamadoService;

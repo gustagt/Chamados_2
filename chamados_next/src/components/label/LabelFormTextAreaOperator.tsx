@@ -4,7 +4,7 @@ export default function LabelFormTextAreaOperator({label, value, setValue}: Labe
       {label}
       <textarea
         className="border border-[#808080] px-2 py-1 text-[#313131] font-normal rounded resize-none"
-        value={value}
+        value={value || ""}
         onChange={(e) => setValue(e.target.value)}
      />
     </label>

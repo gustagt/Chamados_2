@@ -19,20 +19,22 @@ interface IProtocol {
     accesses: number[];
   };
   sector?: {
-    id: 2;
-    sector: "Vice Presidência";
+    id: number;
+    sector: string;
   };
   origin?: {
-    id: 1;
-    origin: "computador";
+    id: number;
+    origin: string;
   };
   status?: {
-    id: 1;
-    status: "Criado";
+    id: number;
+    status: string;
   };
   service?: {
-    id: 3;
-    service: "Computador lento";
-    idOrigin: 1;
+    id: number;
+    service: string;
+    idOrigin: number;
   };
 }
+
+

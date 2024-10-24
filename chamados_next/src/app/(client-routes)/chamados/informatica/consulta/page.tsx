@@ -19,7 +19,7 @@ export default function Page() {
 
   useEffect(() => {
     dispatch(reset());
-  }, []);
+  }, [dispatch]);
 
   const [idProtocol, setIdProtocol] = useState<string>("");
 

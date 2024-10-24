@@ -3,6 +3,7 @@ export default function LabelFormSelectOperator({
   value,
   setValue,
   array,
+  required
 }: LabelFormSelectOperatorProps) {
   return (
     <label htmlFor="" className="flex flex-col gap-2 w-full ">
@@ -14,9 +15,9 @@ export default function LabelFormSelectOperator({
         className="border border-[#808080] px-2 py-1 text-[#313131] font-normal rounded  w-full"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        required
+        required={required}
       >
-        <option></option>
+   
         {array &&
           array.map(
             (item) =>
@@ -57,4 +58,5 @@ type LabelFormSelectOperatorProps = {
     service?: string;
     status?: string;
   }[];
+  required?:boolean
 };
