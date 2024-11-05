@@ -6,15 +6,18 @@ import { useRouter } from "next/navigation";
 import ButtonPrimary from "@/components/buttons/ButtonPrimary";
 import LinkPrimary from "@/components/links/LinkPrimary";
 import CardChamadoOne from "@/components/cards/CardChamadoOne";
+import CardError from "@/components/cards/CardError";
 
 export default function Page() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<boolean>(false)
 
   const router = useRouter();
 
   async function handleSubmit(event: SyntheticEvent) {
     event.preventDefault();
+    setError(false)
 
     const result = await signIn("client", {
       username,
@@ -23,12 +26,15 @@ export default function Page() {
       
     });
 
-    if (result?.error) {
-      console.log(result);
+    if (result?.ok) {
+      router.replace("/chamados");
+      return
+    }else{
+      console.error(error)
+      setError(true)
       return;
     }
 
-    router.replace("/chamados");
   }
 
   return (
@@ -36,6 +42,7 @@ export default function Page() {
       <CardChamadoOne />
       <div className="flex justify-center items-center">
         <form className="flex flex-col  w-2/5 min-w-60" onSubmit={handleSubmit}>
+          {error && <CardError />}
           <label htmlFor="username" className="font-semibold">
             Usuário:
           </label>
@@ -47,6 +54,7 @@ export default function Page() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             maxLength={45}
+            required
           />
           <label htmlFor="password" className="font-semibold">
             Senha:
@@ -59,6 +67,7 @@ export default function Page() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             maxLength={45}
+            required
           />
           <div className="flex mt-7 justify-between gap-3 flex-wrap 2xl:flex-nowrap ">
             <ButtonPrimary text="Entrar"></ButtonPrimary>

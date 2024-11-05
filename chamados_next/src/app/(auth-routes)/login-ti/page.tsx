@@ -6,15 +6,19 @@ import { useRouter } from "next/navigation";
 import  ButtonPrimary  from "@/components/buttons/ButtonPrimary";
 import  LinkPrimary  from "@/components/links/LinkPrimary";
 import  CardChamadoOne  from "@/components/cards/CardChamadoOne";
+import CardError from "@/components/cards/CardError";
 
 export default function Page() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<boolean>(false)
+
 
   const router = useRouter();
 
   async function handleSubmit(event: SyntheticEvent) {
     event.preventDefault();
+    setError(false)
 
     const result = await signIn("operatorTi", {
       username,
@@ -22,12 +26,17 @@ export default function Page() {
       redirect:false,
     });
 
-    if (result?.error) {
-      console.log(result);
+  
+    if (result?.ok) {
+      router.replace("/dashboard");
+      return
+    }else{
+      console.error(error)
+      setError(true)
       return;
     }
 
-    router.replace("/dashboard");
+
   }
 
   return (
@@ -35,6 +44,7 @@ export default function Page() {
       <CardChamadoOne ti/>
       <div className="flex justify-center items-center">
         <form className="flex flex-col  w-2/5 min-w-60" onSubmit={handleSubmit}>
+        {error && <CardError />}
           <label htmlFor="username" className="font-semibold">
             Usuário:
           </label>
