@@ -4,7 +4,11 @@ import LabelFormOperator from "@/components/label/LabelFormOperator";
 import LabelFormTextAreaOperator from "@/components/label/LabelFormTextAreaOperator";
 import IconLinkNav from "@/components/links/IconLinkNav";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
-import { getChamadoId, getChamados, putChamado } from "@/lib/slices/chamado.slice";
+import {
+  getChamadoId,
+  getChamados,
+  putChamado,
+} from "@/lib/slices/chamado.slice";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { SyntheticEvent, useEffect, useRef, useState } from "react";
@@ -14,7 +18,7 @@ import { getAtendimentoOrigemID } from "@/lib/slices/atendimento.slice";
 import { getOrigens } from "@/lib/slices/origem.slice";
 import { getStatus } from "@/lib/slices/status.slice";
 import Link from "next/link";
-
+import FormEditCreateUser from "@/components/forms/FormEditCreateUser";
 
 export default function Page() {
   const initialized = useRef(false);
@@ -35,16 +39,16 @@ export default function Page() {
       );
       dispatch(
         getOrigens({ token: session.user.token, role: session.user.role })
-      );   dispatch(
+      );
+      dispatch(
         getStatus({ token: session.user.token, role: session.user.role })
       );
       initialized.current = true;
     }
   });
-  
-  
+
   const dispatch = useAppDispatch();
-  
+
   const { chamado: protocol, loading } = useAppSelector(
     (state) => state.chamadoState
   );
@@ -52,7 +56,7 @@ export default function Page() {
   const { origens } = useAppSelector((state) => state.origemState);
   const { atendimentos } = useAppSelector((state) => state.atendimentoState);
   const { status: statusArray } = useAppSelector((state) => state.statusState);
-  
+
   useEffect(() => {
     if (protocol) {
       setName(protocol.name);
@@ -75,21 +79,23 @@ export default function Page() {
   const [email, setEmail] = useState<string>("");
   const [status, setStatus] = useState<string>("");
 
-  
-  useEffect(()=>{
-    if(origin){
-      dispatch(getAtendimentoOrigemID({origem: Number(origin), token: session?.user.token, role: session?.user.role }))
+  useEffect(() => {
+    if (origin) {
+      dispatch(
+        getAtendimentoOrigemID({
+          origem: Number(origin),
+          token: session?.user.token,
+          role: session?.user.role,
+        })
+      );
     }
-  },[origin,dispatch,session])
+  }, [origin, dispatch, session]);
 
-  const handleSubmit = (e: SyntheticEvent ) =>{
-    e.preventDefault()
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
 
-
-
-    
-    const protocolForm:IProtocol = {
-      ... protocol as IProtocol,
+    const protocolForm: IProtocol = {
+      ...(protocol as IProtocol),
       name,
       idOrigin: Number(origin),
       idSector: Number(sector),
@@ -100,12 +106,16 @@ export default function Page() {
       email,
 
       // idSystem: Number(system),
-    }
+    };
 
-
-
-    dispatch(putChamado({chamado: protocolForm, token: session?.user.token, role: session?.user.role }))
-  }
+    dispatch(
+      putChamado({
+        chamado: protocolForm,
+        token: session?.user.token,
+        role: session?.user.role,
+      })
+    );
+  };
 
   return (
     <div className="flex flex-col gap-10 md:gap-20">
@@ -127,76 +137,84 @@ export default function Page() {
           </h1>
         </nav>
       </div>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col self-center font-medium gap-2 w-5/6 md:w-4/6 lg:w-3/6 xl:w-2/6"
-      >
-        <div className="flex flex-wrap gap-2 md:gap-6 md:flex-nowrap">
-          <LabelFormOperator
-            label="Solicitante"
-            value={name}
-            setValue={setName}
-            required
-          />
-          <LabelFormSelectOperator
-            label="Origem"
-            value={origin}
-            setValue={setOrigin}
-            array={origens}
-            required
-          />
-        </div>
-        <div className="flex flex-wrap gap-2 md:gap-6 md:flex-nowrap">
-          <LabelFormSelectOperator
-            label="Setor"
-            value={sector}
-            setValue={setSector}
-            array={setores}
-            required
-          />
-          {atendimentos && <LabelFormSelectOperator
-            label="Descrição"
-            value={service}
-            setValue={setDetails}
-            array={atendimentos}
-            required
-          />}
-        </div>
-        <LabelFormTextAreaOperator
-          label="Observação"
-          value={details}
-          setValue={setDetails}
-        />
-        <LabelFormTextAreaOperator
-          label="Observação Interna"
-          value={observation}
-          setValue={setObservation}
-        />
-        <LabelFormOperator
-          label="E-mail"
-          type="email"
-          value={email}
-          setValue={setEmail}
-        />
-
-        <div className="flex flex-col md:flex-row gap-6 justify-between mb-12">
-          <LabelFormSelectOperator
-            label="Status"
-            value={status}
-            setValue={setStatus}
-            array={statusArray}
-            required
-          />
-          <div className="flex self-end w-full justify-between gap-2">
-            <Link href="/dashboard" className="border border-[#313131] rounded w-full py-1 text-center">
-              Cancelar
-            </Link>
-            <button className="border bg-[#313131] rounded text-white w-full py-1">
-              Salvar
-            </button>
+      <div className="flex flex-col self-center font-medium gap-2 w-full">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col self-center font-medium gap-2 w-5/6 md:w-4/6 lg:w-3/6 xl:w-2/6"
+        >
+          <h2 className="text-[#848282] text-lg">Dados do Chamado</h2>
+          <div className="flex flex-wrap gap-2 md:gap-6 md:flex-nowrap">
+            <LabelFormOperator
+              label="Solicitante"
+              value={name}
+              setValue={setName}
+              required
+            />
+            <LabelFormSelectOperator
+              label="Origem"
+              value={origin}
+              setValue={setOrigin}
+              array={origens}
+              required
+            />
           </div>
-        </div>
-      </form>
+          <div className="flex flex-wrap gap-2 md:gap-6 md:flex-nowrap">
+            <LabelFormSelectOperator
+              label="Setor"
+              value={sector}
+              setValue={setSector}
+              array={setores}
+              required
+            />
+            {atendimentos && (
+              <LabelFormSelectOperator
+                label="Descrição"
+                value={service}
+                setValue={setDetails}
+                array={atendimentos}
+                required
+              />
+            )}
+          </div>
+          <LabelFormTextAreaOperator
+            label="Observação"
+            value={details}
+            setValue={setDetails}
+          />
+          <LabelFormTextAreaOperator
+            label="Observação Interna"
+            value={observation}
+            setValue={setObservation}
+          />
+          <LabelFormOperator
+            label="E-mail"
+            type="email"
+            value={email}
+            setValue={setEmail}
+          />
+          <div className="flex flex-col md:flex-row gap-6 justify-between mb-12">
+            <LabelFormSelectOperator
+              label="Status"
+              value={status}
+              setValue={setStatus}
+              array={statusArray}
+              required
+            />
+            <div className="flex self-end w-full justify-between gap-2">
+              <Link
+                href="/dashboard"
+                className="border border-[#313131] rounded w-full py-1 text-center"
+              >
+                Cancelar
+              </Link>
+              <button className="border bg-[#313131] rounded text-white w-full py-1">
+                Salvar
+              </button>
+            </div>
+          </div>
+        </form>
+          {origin === '3' && protocol && <FormEditCreateUser protocol={protocol} />}
+      </div>
     </div>
   );
 }

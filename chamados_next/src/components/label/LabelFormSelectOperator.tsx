@@ -40,6 +40,11 @@ export default function LabelFormSelectOperator({
                 <option key={`${label}-${item.id}`} value={item.id}>
                   {item.status}
                 </option>
+              ))||
+              (item.contractType && (
+                <option key={`${label}-${item.id}`} value={item.id}>
+                  {item.contractType}
+                </option>
               ))
           )}
       </select>
@@ -57,6 +62,7 @@ type LabelFormSelectOperatorProps = {
     sector?: string;
     service?: string;
     status?: string;
+    contractType?: string;
   }[];
   required?:boolean
 };

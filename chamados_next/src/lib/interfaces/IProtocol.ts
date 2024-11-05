@@ -16,7 +16,12 @@ interface IProtocol {
     name: string;
     function: string;
     idContractType: number;
-    accesses: number[];
+    idAccesses: number[];
+    accesses?: IAccess[];
+    contractType?: {
+      id: number;
+      contractType: string;
+    };
   };
   sector?: {
     id: number;

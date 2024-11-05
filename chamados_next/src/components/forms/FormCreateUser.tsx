@@ -24,7 +24,7 @@ export default function FormCreateUser({
   const initialized = useRef(false);
   useEffect(() => {
     if (!initialized.current && session?.user.token) {
-      store.dispatch(getAcessos(session.user.token));
+      store.dispatch(getAcessos({token: session.user.token}));
       initialized.current = true;
     }
   });
@@ -82,7 +82,7 @@ export default function FormCreateUser({
         name: nome,
         function: funcao,
         idContractType: parseInt(tipoContratacao),
-        accesses: acessoForm.map(Number),
+        idAccesses: acessoForm.map(Number),
       },
     };
 

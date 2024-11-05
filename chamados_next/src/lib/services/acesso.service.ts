@@ -1,7 +1,7 @@
 import { api, requestConfig } from "../utils/config";
 
-const getAcessos = async (token?: string) => {
-  const config = requestConfig("GET", null, token);
+const getAcessos = async (token?: string, role?: string) => {
+  const config = requestConfig("GET", null, token, null,role);
 
   try {
     const res = await fetch(`${api}/acessos`, config).then((res) =>

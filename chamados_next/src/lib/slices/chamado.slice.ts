@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import chamadoService from "../services/chamado.service";
+import { array } from "zod";
 
 export const getChamados = createAsyncThunk<
   [],
@@ -75,6 +76,14 @@ export const postReview = createAsyncThunk<
   if (response.message) return thunkAPI.rejectWithValue(response.message);
 
   return response;
+});
+
+export const webhook = createAsyncThunk<
+  IProtocol[],
+  IProtocol[],
+  { rejectValue: string }
+>("chamado/webhoook", async (array, thunkAPI) => {
+  return array;
 });
 
 interface ChamadosState {
@@ -162,13 +171,15 @@ const chamadoSlice = createSlice({
       state.error = action.payload;
     });
     builder.addCase(getChamados.fulfilled, (state, action) => {
-      state.chamados = action.payload;
+      
+      
+      if(state.chamados !== action.payload) state.chamados = action.payload;
       state.loading = "succeeded";
       state.error = undefined;
     });
     builder.addCase(getChamados.pending, (state, action) => {
       // Add user to the state array
-      state.chamados = [];
+      // state.chamados = [];
       state.loading = "pending";
       state.error = undefined;
     });
@@ -194,19 +205,27 @@ const chamadoSlice = createSlice({
       state.error = action.payload;
     });
     builder.addCase(putChamado.fulfilled, (state, action) => {
-      state.chamado = action.payload
+      state.chamado = action.payload;
+      state.chamados = state.chamados.map((chamado) =>
+        chamado.id === action.payload.id
+          ? { ...chamado, idStatus: chamado.idStatus + 1 }
+          : chamado
+      );
       state.loading = "succeeded";
       state.error = undefined;
     });
     builder.addCase(putChamado.pending, (state, action) => {
-      state.chamado = undefined
+      state.chamado = undefined;
       state.loading = "pending";
       state.error = undefined;
     });
     builder.addCase(putChamado.rejected, (state, action) => {
-      state.chamado = undefined
+      state.chamado = undefined;
       state.loading = "failed";
       state.error = action.payload;
+    });
+    builder.addCase(webhook.fulfilled, (state, action) => {
+      state.chamados = action.payload;
     });
   },
 });

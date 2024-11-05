@@ -5,7 +5,11 @@ import IconArrowPage from "@/components/Icons/IconArrowPage";
 import IconSearch from "@/components/Icons/IconSearch";
 import IconTwoArrowPage from "@/components/Icons/IconTwoArrowPage";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
-import { deleteChamado, getChamados } from "@/lib/slices/chamado.slice";
+import {
+  deleteChamado,
+  getChamados,
+  putChamado,
+} from "@/lib/slices/chamado.slice";
 import { useSession } from "next-auth/react";
 
 import Image from "next/image";
@@ -37,6 +41,10 @@ export default function Page() {
 
   const rows = 13;
   const pages = Math.ceil(protocolRender.length / rows);
+
+  function checkArrays(a1: IProtocol[], a2: IProtocol[]) {
+    return JSON.stringify(a1) !== JSON.stringify(a2);
+  }
   useEffect(() => {
     if (checkedItems.length !== 0) {
       setProtocolRender(
@@ -45,10 +53,10 @@ export default function Page() {
         )
       );
       setPage(1);
-    } else {
+    } else if (checkArrays(protocolRender, protocols)) {
       setProtocolRender(protocols);
     }
-  }, [checkedItems, protocols]);
+  }, [checkedItems, protocols, protocolRender]);
   useEffect(() => {
     if (search) {
       setProtocolsTable(
@@ -61,9 +69,19 @@ export default function Page() {
     } else {
       setProtocolsTable(protocolRender.slice((page - 1) * rows, page * rows));
     }
-    setVisibleRows({})
+
+    setVisibleRows({});
   }, [page, search, protocolRender]);
 
+  useEffect(() => {
+    if (session) {
+      const interval = setInterval(() => {
+        dispatch(getChamados(session.user.token));
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+  });
   const [visibleRows, setVisibleRows] = useState<{ [key: number]: boolean }>(
     {}
   );
@@ -84,10 +102,23 @@ export default function Page() {
     }
   };
 
-  const handleDelete = (id: number) => {  
-    dispatch(deleteChamado({id, token: session?.user.token}))
-  }
+  const handleDelete = (id: number) => {
+    dispatch(deleteChamado({ id, token: session?.user.token }));
+  };
 
+  const handleUpProtocol = (protocol: IProtocol) => {
+    const protocolUpStatus: IProtocol = {
+      ...protocol,
+      idStatus: protocol.idStatus + 1,
+    };
+    dispatch(
+      putChamado({
+        chamado: protocolUpStatus,
+        token: session?.user.token,
+        role: session?.user.role,
+      })
+    );
+  };
 
   return (
     <div className="flex flex-col">
@@ -235,16 +266,31 @@ export default function Page() {
                             width={20}
                             height={20}
                             alt="concluir"
+                            onClick={() => handleUpProtocol(protocol)}
                           />
                         )}
-                        {protocol.idStatus === 1 && (
+                        {protocol.idStatus === 1 && protocol.idOrigin !== 3 && (
                           <Image
                             className="cursor-pointer"
                             src={"/icons/plus.png"}
                             width={20}
                             height={20}
                             alt="Subir processo"
+                            onClick={() => handleUpProtocol(protocol)}
                           />
+                        )}
+                        {protocol.idStatus === 1 && protocol.idOrigin === 3 && (
+                          <Link
+                            href={`/dashboard/criar-usuario/${protocol.id}`}
+                          >
+                            <Image
+                              className="cursor-pointer"
+                              src={"/icons/plus.png"}
+                              width={20}
+                              height={20}
+                              alt="Subir processo"
+                            />
+                          </Link>
                         )}
                       </div>
                     </td>
