@@ -10,7 +10,7 @@ export default function ModalConsult({ chamado } : ModalConsulProps) {
         dispatch(reset())
     }
   return (
-    <div className="flex justify-center items-center bg-black/50 backdrop-blur-sm fixed inset-0">
+    <div className="flex justify-center items-center bg-black/50 backdrop-blur-sm fixed inset-0 ">
       <div className="flex flex-col bg-white w-11/12 md:w-2/4  xl:w-2/4 2xl:w-2/5  rounded-md p-16 gap-14">
         <h2 className="text-3xl font-medium text-[#0B612C] text-center">
           Chamado <span className="font-bold">ID {chamado.id}</span>

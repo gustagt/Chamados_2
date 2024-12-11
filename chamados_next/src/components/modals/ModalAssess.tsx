@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
+import getCookie from "@/lib/hooks/useSession";
 import { postReview } from "@/lib/slices/chamado.slice";
-import { useSession } from "next-auth/react";
+
 import Image from "next/image";
 import { useState } from "react";
 
@@ -10,7 +11,7 @@ export default function ModalAssess({
   handleStatusPage,
 }: ModalAssessProps) {
   const items = [0, 1, 2, 3, 4];
-  const { data: session } = useSession();
+  const session = getCookie('user')
   const chamado = useAppSelector((state)=> state.chamadoState.chamado)
 
   const [star, setStar] = useState<number>(5);

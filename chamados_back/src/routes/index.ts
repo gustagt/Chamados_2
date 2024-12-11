@@ -20,7 +20,6 @@ const authControl = new AuthController();
 
 router.use(loginRouter)
 router.use(authControl.authenticate.bind(authControl))
-
 router.use(protocolRouter)
 router.use(accessRouter)
 router.use(serviceRouter)

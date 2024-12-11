@@ -1,21 +1,21 @@
 "use client";
 
 import { signOut } from "next-auth/react";
-import Image from "next/image";
+
 import { useRouter } from "next/navigation";
 import IconX from "../Icons/IconX";
+import Cookies  from 'js-cookie';
 
 export default function ButtonLogout({
-  path,
+
+  type,
   className,
+  color
 }: ButtonLogoutProps) {
   const router = useRouter();
   async function logout() {
-    await signOut({
-      redirect: false,
-    });
-
-    router.replace(path);
+    Cookies.remove(type)
+    router.refresh()
   }
 
   return (
@@ -23,13 +23,15 @@ export default function ButtonLogout({
       className={`flex flex-col self-start justify-self-end p-4 text-center hover:cursor-pointer ${className}`}
       onClick={logout}
     >
-      <IconX color="white" width={46} height={46} />
+      <IconX color={color} width={46} height={46} />
       <span>Sair</span>
     </div>
   );
 }
 
 type ButtonLogoutProps = {
-  path: string;
+
+  type: string;
   className?: string;
+  color: string
 };

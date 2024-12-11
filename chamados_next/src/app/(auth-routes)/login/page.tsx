@@ -4,37 +4,35 @@ import { signIn } from "next-auth/react";
 import { SyntheticEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import ButtonPrimary from "@/components/buttons/ButtonPrimary";
-import LinkPrimary from "@/components/links/LinkPrimary";
 import CardChamadoOne from "@/components/cards/CardChamadoOne";
 import CardError from "@/components/cards/CardError";
+import authService from "@/lib/services/auth.service";
+import Cookies from 'js-cookie';
 
 export default function Page() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<boolean>(false)
+  const [error, setError] = useState<boolean>(false);
 
   const router = useRouter();
 
   async function handleSubmit(event: SyntheticEvent) {
     event.preventDefault();
-    setError(false)
+    setError(false);
 
-    const result = await signIn("client", {
+    const result = await authService.login({
       username,
       password,
-      redirect: false,
-      
     });
 
-    if (result?.ok) {
-      router.replace("/chamados");
-      return
-    }else{
-      console.error(error)
-      setError(true)
+    if (!result.user) {
+      console.error(error);
+      setError(true);
       return;
+    } else {
+      Cookies.set('user', JSON.stringify(result),{ expires: 5 })
+      router.push('chamados')
     }
-
   }
 
   return (
@@ -42,7 +40,14 @@ export default function Page() {
       <CardChamadoOne />
       <div className="flex justify-center items-center">
         <form className="flex flex-col  w-2/5 min-w-60" onSubmit={handleSubmit}>
-          {error && <CardError />}
+          {error && (
+            <CardError
+              title="Falha ao realizar login"
+              textOne="Verificar se as informações de login estão corretas"
+              textTwo="Para efetuar o login, utilizar o mesmo acesso usado para entrar na
+          máquina"
+            />
+          )}
           <label htmlFor="username" className="font-semibold">
             Usuário:
           </label>

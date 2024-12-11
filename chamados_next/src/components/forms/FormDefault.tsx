@@ -1,6 +1,6 @@
 import {SyntheticEvent, useEffect, useState } from "react";
 import LabelForm from "../label/LabelForm";
-import { Session } from "next-auth";
+
 import Image from "next/image";
 import ButtonSecundary from "../buttons/ButtonSecundary";
 
@@ -68,7 +68,8 @@ export default function FormDefault({
   
   return (
     <form className="flex flex-col gap-3 font-medium w-5/6 sm:w-3/4 md:w-2/4 " onSubmit={handleSubmit}>
-      {postChamadoStatus === 'succeeded' && statusPage === 3 && <ModalPrimary pathIcon="/icons/checkGreen.svg" altIcon="Sucesso"  /> }
+        {postChamadoStatus === 'succeeded' && statusPage === 3 && type !== 5 && <ModalPrimary icon="checkGreeen" className="text-[#259F00]" classNameButton="bg-[#259F00]" text="Agora é só aguardar. Em breve um integrante de nossa equipe estará atendendo sua solicitação."/> }
+      {postChamadoStatus === 'succeeded' && statusPage === 3 && type === 5 && <ModalPrimary icon="outlet" className="text-[#3B4A75]" classNameButton="bg-[#3B4A75]" text="Você já pode retirar seu periférico na TI, traga o antigo para a troca."/> }
       {postChamadoStatus === 'succeeded' && statusPage === 1 &&  <ModalSecondary pathIcon="/icons/alertBig.svg" altIcon="Alerta" handleStatusPage={setStatusPage}/> }
       {postChamadoStatus === 'succeeded' && statusPage === 2 && <ModalAssess pathIcon="/icons/star.svg" altIcon="Estrela" handleStatusPage={setStatusPage} /> }
       
@@ -118,7 +119,7 @@ export default function FormDefault({
         >
           <option></option>
 
-          {atendimentos &&
+          {(type !== 0) && atendimentos &&
             atendimentos.map(
               (atendimento: { id: number; service: string }) => (
                 <option
@@ -160,7 +161,7 @@ export default function FormDefault({
                   </option>
                 )
               )}
-          <option value="0">Outros</option>
+          <option value="0">Outros</option>                                                                                                                                                                                                                                                                                                                                                                      
               
           </select>
         </label>
@@ -203,13 +204,14 @@ export default function FormDefault({
       <div className="flex justify-end">
           <ButtonSecundary text="Enviar" />
         </div>
+
     </form>
   );
 }
 
 type FormDefaultProps = {
   type: number;
-  session: Session | null;
+  session: any;
   setores: [];
   atendimentos: [];
   sistemas?: [];

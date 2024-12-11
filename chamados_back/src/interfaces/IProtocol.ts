@@ -9,10 +9,11 @@ export default interface IProtocol {
   idStatus: number;
   idService: number;
   idSystem?: number;
+  createdAt?: Date;
   user?: {
     name: string;
     function: string;
     idContractType: number;
-    accesses: number[];
+    idAccesses: number[];
   };
 }

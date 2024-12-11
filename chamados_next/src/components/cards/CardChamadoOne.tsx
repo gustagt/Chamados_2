@@ -2,6 +2,7 @@ import Image from "next/image";
 import IconLinkNav from "../links/IconLinkNav";
 import ButtonLogout from "../buttons/ButtonLogout";
 
+
 export default function CardChamadoOne({ back, logout, ti }: CardChamadoProps) {
   return (
     <div className="bg-teclado bg-cover h-full rounded">
@@ -13,7 +14,7 @@ export default function CardChamadoOne({ back, logout, ti }: CardChamadoProps) {
         />
         )}
 
-        {logout && <ButtonLogout path="/login" />}
+        {logout && <ButtonLogout type="user" color="white"/>}
 
         <div className="flex flex-wrap w-3/4 lg:flex-nowrap  row-start-2 md:row-start-3 justify-self-center  justify-center md:justify-center items-center gap-2">
           <Image

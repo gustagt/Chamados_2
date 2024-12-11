@@ -4,22 +4,27 @@ import IconArrowPage from "@/components/Icons/IconArrowPage";
 
 import IconSearch from "@/components/Icons/IconSearch";
 import IconTwoArrowPage from "@/components/Icons/IconTwoArrowPage";
+import ModalFinish from "@/components/modals/ModalFinish";
+import ModalDelete from "@/components/modals/ModalDelete";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
 import {
-  deleteChamado,
+
   getChamados,
   putChamado,
+  resetLoading,
 } from "@/lib/slices/chamado.slice";
-import { useSession } from "next-auth/react";
+
 
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useEffect, useRef, useState } from "react";
+import CardError from "@/components/cards/CardError";
+import getCookie from "@/lib/hooks/useSession";
 
 export default function Page() {
   const initialized = useRef(false);
 
-  const { data: session } = useSession();
+  const session = getCookie('user-ti')
 
   useEffect(() => {
     if (!initialized.current && session?.user.token) {
@@ -28,16 +33,20 @@ export default function Page() {
     }
   });
 
+
   const dispatch = useAppDispatch();
 
-  const { chamados: protocols } = useAppSelector((state) => state.chamadoState);
+  const { chamados: protocols, error: errorProtocol} = useAppSelector((state) => state.chamadoState);
 
   const [search, setSearch] = useState<string>("");
   const [protocolRender, setProtocolRender] = useState<IProtocol[]>([]);
   const [protocolsTable, setProtocolsTable] = useState<IProtocol[]>([]);
   const [page, setPage] = useState<number>(1);
-
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
+  const [modal, setModal] = useState<{
+    modal: "finish" | "delete";
+    protocol: IProtocol;
+  }>();
 
   const rows = 13;
   const pages = Math.ceil(protocolRender.length / rows);
@@ -102,26 +111,33 @@ export default function Page() {
     }
   };
 
-  const handleDelete = (id: number) => {
-    dispatch(deleteChamado({ id, token: session?.user.token }));
+  const handleDelete = (protocol: IProtocol) => {
+    setModal({ modal: "delete", protocol });
   };
 
   const handleUpProtocol = (protocol: IProtocol) => {
-    const protocolUpStatus: IProtocol = {
-      ...protocol,
-      idStatus: protocol.idStatus + 1,
-    };
-    dispatch(
-      putChamado({
-        chamado: protocolUpStatus,
-        token: session?.user.token,
-        role: session?.user.role,
-      })
-    );
+    if (protocol.idStatus + 1 === 3) {
+      dispatch(resetLoading())
+      setModal({ modal: "finish", protocol });
+    } else {
+      const protocolUpStatus: IProtocol = {
+        ...protocol,
+        idStatus: protocol.idStatus + 1,
+      };
+      dispatch(
+        putChamado({
+          chamado: protocolUpStatus,
+          token: session?.user.token,
+          role: session?.user.role,
+        })
+      );
+    }
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mb-10">
+      {modal?.modal == "finish" && <ModalFinish protocol={modal.protocol} cancelModal={setModal}/>}
+      {modal?.modal == "delete" && <ModalDelete protocol={modal.protocol} cancelModal={setModal}/>}
       <div className="bg-teclado bg-cover h-fit ">
         <nav className="flex flex-col-reverse md:flex-row bg-[#1e1e1eda] h-full items-center justify-between text-white px-12 py-6">
           <div className="flex flex-wrap-reverse gap-12 w-full py-6">
@@ -192,12 +208,15 @@ export default function Page() {
           </div>
           <div className="flex w-full md:w-auto gap-12 items-center justify-between  ">
             <h1 className="text-2xl font-semibold">DASHBOARD</h1>
-            <ButtonLogout path="/login-ti" />
+            <ButtonLogout type="user-ti" color="white" />
           </div>
         </nav>
       </div>
       <div className="flex flex-col w-11/12 content-center self-center mt-6 overflow-x-auto ">
-        <table className="table-auto min-w-max text-center box-border">
+        <div className="flex justify-center">
+          {errorProtocol && <CardError title={errorProtocol}/> }
+        </div>
+       <table className="table-auto min-w-max text-center box-border">
           <thead className="bg-[#313131] text-white h-10 ">
             <tr>
               <th className="rounded-tl-md px-2">ID</th>
@@ -244,7 +263,7 @@ export default function Page() {
                         <Image
                           className="cursor-pointer"
                           src={"/icons/trash.png"}
-                          onClick={() => handleDelete(protocol.id || 0)}
+                          onClick={() => handleDelete(protocol)}
                           width={20}
                           height={20}
                           alt="excluir"
@@ -252,7 +271,7 @@ export default function Page() {
                         <Image
                           className={`${
                             visibleRows[id] ? "rotate-0" : "rotate-90"
-                          } cursor-pointer`}
+                          } cursor-pointer `}
                           onClick={() => toggleVisibility(id)}
                           src={"/icons/arrow.png"}
                           width={20}

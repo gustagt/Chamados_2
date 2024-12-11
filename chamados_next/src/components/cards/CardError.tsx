@@ -1,10 +1,10 @@
-export default function CardError() {
+export default function CardError({title, textOne, textTwo}: CardErrorProps) {
   return (
-    <div className="flex gap-3 mb-8">
+    <div className="flex gap-3 ">
       <svg
         width="50"
         height="80"
-        viewBox="0 0 29 90"
+        viewBox="0 -10 29 90"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -14,17 +14,18 @@ export default function CardError() {
         />
       </svg>
       <div className="flex flex-col text-[#747474] leading-tight gap-1">
-        <span className="text-[#C60000] font-semibold text-xl">Falha ao realizar login</span>
-        <p>Verificar se as informações de login estão corretas</p>
-        <p>
-          Para efetuar o login, utilizar o mesmo acesso usado para entrar na
-          máquina
-        </p>
-      </div>{" "}
+        <span className="text-[#C60000] font-semibold text-xl">{title}</span>
+        {textOne && <p>{textOne}</p>}
+        {textTwo &&<p>
+          {textTwo}
+        </p>}
+      </div>
     </div>
   );
 }
 
 type CardErrorProps = {
-
+    title: string
+    textOne?: string
+    textTwo?: string
 };

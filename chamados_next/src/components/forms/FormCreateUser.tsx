@@ -9,7 +9,6 @@ import { getAcessos } from "@/lib/slices/acesso.slice";
 import { redirect } from "next/navigation";
 import { postChamado } from "@/lib/slices/chamado.slice";
 import ModalPrimary from "../modals/ModalPrimary";
-import ModalSecondary from "../modals/ModalSecondary";
 import ModalAssess from "../modals/ModalAssess";
 
 
@@ -30,7 +29,7 @@ export default function FormCreateUser({
   });
 
   const { acessos, error: errorAcesso } = useAppSelector((state) => state.acessoState);
-  const postChamadoStatus = useAppSelector((state) => state.chamadoState.loading)
+  const {chamado:protocol, loading: postChamadoStatus} = useAppSelector((state) => state.chamadoState)
 
   const dispatch = useAppDispatch();
 
@@ -96,7 +95,7 @@ export default function FormCreateUser({
       className="flex flex-col gap-3 font-medium w-5/6 sm:w-3/4 md:w-2/4"
       onSubmit={handleSubmit}
     >
-        {postChamadoStatus === 'succeeded' && statusPage === 3 && <ModalPrimary pathIcon="/icons/checkGreen.svg" altIcon="Sucesso"  /> }
+      {postChamadoStatus === 'succeeded' && statusPage === 3 && <ModalPrimary icon="checkGreeen" className="text-[#259F00]" classNameButton="bg-[#259F00]"  text="Agora é só aguardar. Em breve um integrante de nossa equipe estará atendendo sua solicitação."/> }
       {postChamadoStatus === 'succeeded' && statusPage === 2 && <ModalAssess pathIcon="/icons/star.svg" altIcon="Estrela" handleStatusPage={setStatusPage} /> }
       
       
@@ -276,7 +275,7 @@ export default function FormCreateUser({
 }
 
 type FormCreateUserProps = {
-  session: Session | null;
+  session: any;
   setores: [];
   type: number;
   handleError: Dispatch<SetStateAction<string>>

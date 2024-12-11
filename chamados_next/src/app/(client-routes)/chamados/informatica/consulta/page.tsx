@@ -6,13 +6,14 @@ import ModalConsult from "@/components/modals/ModalConsult";
 import { useAppDispatch, useAppSelector, useAppStore } from "@/lib/hooks/redux";
 import { getChamadoId, reset } from "@/lib/slices/chamado.slice";
 
+
 import Image from "next/image";
 import { SyntheticEvent, useEffect, useState } from "react";
-import { Session } from "next-auth";
-import { useSession } from "next-auth/react";
+import getCookie from "@/lib/hooks/useSession";
+
 
 export default function Page() {
-  const { data: session } = useSession();
+  const session = getCookie('user')
   const { chamado, error } = useAppSelector((state) => state.chamadoState);
 
   const dispatch = useAppDispatch();

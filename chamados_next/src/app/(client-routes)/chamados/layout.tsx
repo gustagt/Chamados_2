@@ -11,6 +11,7 @@ interface PrivateLayoutProps{
 }
 
 export default async function PrivateLayout({children}: PrivateLayoutProps) {
+    
 
     return <>{children}</>
 }

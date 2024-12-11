@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import IconLinkNav from "../links/IconLinkNav";
 import ButtonLogout from "../buttons/ButtonLogout";
 import IconThreeDot from "../Icons/IconThreeDot";
@@ -74,8 +74,9 @@ export default function CardFormulario({ type }: CardProps) {
             Dados do chamado
           </h2>
           <ButtonLogout
-            path="/login"
+            type="user"
             className="block md:hidden"
+            color="white"
           />
         </div>
         <div className="flex flex-col gap-6">

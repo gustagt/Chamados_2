@@ -6,22 +6,23 @@ import { getSetores } from "@/lib/slices/setor.slice";
 import { getAtendimentoOrigemID } from "@/lib/slices/atendimento.slice";
 import { useEffect, useRef, useState } from "react";
 
-import { useSession } from "next-auth/react";
+
 
 import FormDefault from "@/components/forms/FormDefault";
 import FormCreateUser from "@/components/forms/FormCreateUser";
 import { getSistemas } from "@/lib/slices/sistema.slice";
 import ButtonLogout from "@/components/buttons/ButtonLogout";
+import getCookie from "@/lib/hooks/useSession";
 
 export default function Page({ params }: { params: { type: number } }) {
   const type = Number(params.type);
 
-  const { data: session, status } = useSession();
+  const session = getCookie('user')
 
   const store = useAppStore();
   const initialized = useRef(false);
   useEffect(() => {
-    if (!initialized.current && status === "authenticated") {
+    if (!initialized.current) {
       store.dispatch(getSetores({token: session?.user.token}));
       store.dispatch(getSistemas({token: session?.user.token}));
       store.dispatch(
@@ -63,9 +64,12 @@ export default function Page({ params }: { params: { type: number } }) {
           </h2>
 
           <ButtonLogout
-            path="/login"
+   
+            type="user"
             className="hidden md:block"
+            color="black"
           />
+     
         </div>
         {error && (
         <div className="bg-red-500 flex flex-col justify-center items-center text-white p-6 rounded-md">

@@ -18,7 +18,7 @@ class ProtocolService {
 
   async getId(id: string) {
     const protocol = await this.model.findByPk(id, {
-      include: ["sector", "origin", "status", "service", "user"],
+      include: ["sector", "origin", "status", "service", {model:User, as:"user", include: ["contractType", "accesses"]}],
     });
     return resp(200, protocol);
   }
@@ -33,8 +33,8 @@ class ProtocolService {
         include: Protocol.associations.user,
       });
 
-      if (protocol.user?.accesses) {
-        await protocolRet.user?.addAccesses(protocol.user?.accesses);
+      if (protocol.user?.idAccesses) {
+        await protocolRet.user?.addAccesses(protocol.user?.idAccesses);
       }
       return resp(201, protocolRet);
     } catch (error) {

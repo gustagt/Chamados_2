@@ -1,21 +1,24 @@
 import Link from "next/link";
 import LabelFormOperator from "../label/LabelFormOperator";
 import LabelFormSelectOperator from "../label/LabelFormSelectOperator";
-import LabelFormTextAreaOperator from "../label/LabelFormTextAreaOperator";
-import { useEffect, useRef, useState } from "react";
-import { useSession } from "next-auth/react";
+import { SyntheticEvent, useEffect, useRef, useState } from "react";
+
 import { getTiposContratacoes } from "@/lib/slices/tiposContratacoes.slice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
 import { getAcessos } from "@/lib/slices/acesso.slice";
 import LabelForm from "../label/LabelForm";
 import Image from "next/image";
+import ModalEditUser from "../modals/ModalEditUser";
+import { reset, resetLoading } from "@/lib/slices/user.slice";
+import CardError from "../cards/CardError";
+import getCookie from "@/lib/hooks/useSession";
 
 export default function FormEditCreateUser({
   protocol,
 }: FormEditCreateUserProps) {
   const initialized = useRef(false);
 
-  const { data: session } = useSession();
+  const session = getCookie('user-ti')
   useEffect(() => {
     if (!initialized.current && session?.user.token) {
     dispatch(getAcessos({token: session.user.token, role: session?.user.role}));
@@ -25,6 +28,7 @@ export default function FormEditCreateUser({
           role: session?.user.role,
         })
       );
+      dispatch(reset())
 
       initialized.current = true;
     }
@@ -36,6 +40,7 @@ export default function FormEditCreateUser({
     (state) => state.tiposContratacoesState
   );
   const { acessos, error: errorAcesso } = useAppSelector((state) => state.acessoState);
+  const { error: errorUser } = useAppSelector((state) => state.userState);
 
   useEffect(() => {
     if (protocol) {
@@ -43,8 +48,12 @@ export default function FormEditCreateUser({
       setFunctionName(protocol.user?.function ||"");
       setContractType(String(protocol.user?.idContractType));
       setAccesses(protocol.user?.accesses|| []);
+      const newArray =  protocol.user?.accesses?.map((access) => (access.id.toString()))
+      setAcessoForm(newArray|| []);
     }
+    
   }, [protocol]);
+
 
   const [name, setName] = useState<string>("");
   const [functionName, setFunctionName] = useState<string>("");
@@ -52,9 +61,12 @@ export default function FormEditCreateUser({
   const [accesses, setAccesses] = useState<IAccess[]>([]);
   const [acessoForm, setAcessoForm] = useState<string[]>([]);
 
+  const [modal, setModal] = useState<{modal: "editUser", user : IUser}>()
+
 
 
   function handleAcessoSelect(acesso: string) {
+    if(acessoForm.includes(acesso)) return
     const newAcessoForm = [...acessoForm, acesso];
     setAcessoForm(newAcessoForm);
   }
@@ -64,9 +76,28 @@ export default function FormEditCreateUser({
     setAcessoForm(newAcessoForm);
   }
 
+  function handleSubmit(e: SyntheticEvent){
+    e.preventDefault()
+    dispatch(resetLoading())
+
+    const formUser: IUser = {
+        id: protocol.user?.id,
+        name, 
+        function: functionName,
+        idAccesses: acessoForm.map(Number),
+        idContractType: Number(contractType)
+    }
+
+    setModal({modal: "editUser", user: formUser})
+  }
+
+
+
   return (
-    <form className="flex flex-col self-center font-medium gap-2 w-5/6 md:w-4/6 lg:w-3/6 xl:w-2/6">
-      <h2 className="text-[#848282] text-lg">
+    <form onSubmit={handleSubmit} className="flex flex-col self-center font-medium gap-2 w-5/6 md:w-4/6 lg:w-3/6 xl:w-2/6">
+     {modal?.modal === "editUser" && modal.user && <ModalEditUser user={modal.user} cancelModal={setModal} />}
+        {errorUser && <CardError title={errorUser} />}
+       <h2 className="text-[#848282] text-lg">
         Dados da solicitação para criação de usuario
       </h2>
       <div className="flex flex-wrap gap-2 md:gap-6 md:flex-nowrap">

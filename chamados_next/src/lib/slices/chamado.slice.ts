@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import chamadoService from "../services/chamado.service";
-import { array } from "zod";
+
 
 export const getChamados = createAsyncThunk<
   [],
@@ -44,10 +44,10 @@ export const postChamado = createAsyncThunk<
 
 export const putChamado = createAsyncThunk<
   IProtocol,
-  { chamado: IProtocol; token: string | undefined; role?: string },
+  { chamado: IProtocol; token: string | undefined; role?: string, message?:string },
   { rejectValue: string }
->("chamado/putChamado", async ({ chamado, token, role }, thunkAPI) => {
-  const response = await chamadoService.putChamado(chamado, token, role);
+>("chamado/putChamado", async ({ chamado, token, role, message }, thunkAPI) => {
+  const response = await chamadoService.putChamado(chamado, token, role, message);
 
   if (response.message) return thunkAPI.rejectWithValue(response.message);
 
@@ -76,14 +76,6 @@ export const postReview = createAsyncThunk<
   if (response.message) return thunkAPI.rejectWithValue(response.message);
 
   return response;
-});
-
-export const webhook = createAsyncThunk<
-  IProtocol[],
-  IProtocol[],
-  { rejectValue: string }
->("chamado/webhoook", async (array, thunkAPI) => {
-  return array;
 });
 
 interface ChamadosState {
@@ -115,6 +107,9 @@ const chamadoSlice = createSlice({
       state.loading = "idle";
       state.error = undefined;
     },
+    resetLoading:(state) =>{
+      state.loading= "idle";
+    }
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -171,22 +166,20 @@ const chamadoSlice = createSlice({
       state.error = action.payload;
     });
     builder.addCase(getChamados.fulfilled, (state, action) => {
-      
-      
-      if(state.chamados !== action.payload) state.chamados = action.payload;
-      state.loading = "succeeded";
+      if (state.chamados !== action.payload) state.chamados = action.payload;
+    
       state.error = undefined;
     });
     builder.addCase(getChamados.pending, (state, action) => {
       // Add user to the state array
       // state.chamados = [];
-      state.loading = "pending";
+    
       state.error = undefined;
     });
     builder.addCase(getChamados.rejected, (state, action) => {
       // Add user to the state array
       state.chamados = [];
-      state.loading = "failed";
+ 
       state.error = action.payload;
     });
     builder.addCase(deleteChamado.fulfilled, (state, action) => {
@@ -208,27 +201,32 @@ const chamadoSlice = createSlice({
       state.chamado = action.payload;
       state.chamados = state.chamados.map((chamado) =>
         chamado.id === action.payload.id
-          ? { ...chamado, idStatus: chamado.idStatus + 1 }
+          ? {
+              ...chamado,
+              idStatus: chamado.idStatus + 1,
+              status: {
+                id: chamado.idStatus + 1,
+                status:
+                  chamado.idStatus + 1 === 2 ? "Em Atendimento" : "Finalizado",
+              },
+            }
           : chamado
       );
       state.loading = "succeeded";
       state.error = undefined;
     });
     builder.addCase(putChamado.pending, (state, action) => {
-      state.chamado = undefined;
+
       state.loading = "pending";
       state.error = undefined;
     });
     builder.addCase(putChamado.rejected, (state, action) => {
-      state.chamado = undefined;
+    
       state.loading = "failed";
       state.error = action.payload;
-    });
-    builder.addCase(webhook.fulfilled, (state, action) => {
-      state.chamados = action.payload;
     });
   },
 });
 
-export const { reset } = chamadoSlice.actions;
+export const { reset, resetLoading } = chamadoSlice.actions;
 export default chamadoSlice.reducer;

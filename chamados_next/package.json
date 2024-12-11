@@ -1,4 +1,5 @@
 {
+  "homepage": "https://chamados.transcon.contagem.mg.gov.br/",
   "name": "chamados_next",
   "version": "0.1.0",
   "private": true,
@@ -10,30 +11,24 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
-    "@types/react-redux": "^7.1.33",
-    "activedirectory2": "^2.2.0",
     "dotenv": "^16.4.5",
-    "jose": "^5.9.3",
+    "js-cookie": "^3.0.5",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
-    "nodemailer": "^6.9.16",
     "react": "^18",
     "react-dom": "^18",
     "react-redux": "^9.1.2",
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1",
-    "ws": "^8.18.0",
-    "zod": "^3.23.8"
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18.3.4",
     "@types/react-dom": "^18",
-    "@types/ws": "^8.5.12",
+    "@types/react-redux": "^7.1.33",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
-    "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

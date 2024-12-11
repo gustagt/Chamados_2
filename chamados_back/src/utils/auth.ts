@@ -10,7 +10,7 @@ const encode = (data: any) => {
     },
     JWT_SECRET || "teste",
     {
-      expiresIn: "3h",
+      expiresIn: "6d",
     }
   );
 
@@ -29,7 +29,7 @@ const encodeTi = (data: any) => {
     },
     JWT_SECRET_TI || "ti",
     {
-      expiresIn: "3h",
+      expiresIn: "6d",
     }
   );
 

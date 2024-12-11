@@ -16,7 +16,7 @@ import IconLinkNav from "@/components/links/IconLinkNav";
 
 export default function Page() {
   return (
-    <div className="grid gap-1 m-4 h-[96vh]">
+    <div className="grid gap-1 m-4 lg:h-[96vh]">
       <div className="bg-teclado bg-cover h-full rounded">
         <div className="bg-black-90 h-full flex flex-col gap-8 rounded text-white">
           <div className="flex justify-between text-center">
@@ -24,7 +24,7 @@ export default function Page() {
               
               pathLink="/chamados"
             />
-            <ButtonLogout path="/login" />
+            <ButtonLogout type="user" color="white" />
           </div>
           <div>
             <h2 className="text-4xl font-medium text-white text-center p-4">

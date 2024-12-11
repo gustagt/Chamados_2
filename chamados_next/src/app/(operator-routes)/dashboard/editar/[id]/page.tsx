@@ -6,10 +6,9 @@ import IconLinkNav from "@/components/links/IconLinkNav";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
 import {
   getChamadoId,
-  getChamados,
-  putChamado,
+  resetLoading,
 } from "@/lib/slices/chamado.slice";
-import { useSession } from "next-auth/react";
+
 import { useParams } from "next/navigation";
 import { SyntheticEvent, useEffect, useRef, useState } from "react";
 import LabelFormSelectOperator from "./../../../../../components/label/LabelFormSelectOperator";
@@ -19,11 +18,14 @@ import { getOrigens } from "@/lib/slices/origem.slice";
 import { getStatus } from "@/lib/slices/status.slice";
 import Link from "next/link";
 import FormEditCreateUser from "@/components/forms/FormEditCreateUser";
+import ModalEdit from "@/components/modals/ModalEdit";
+import CardError  from '@/components/cards/CardError';
+import getCookie from "@/lib/hooks/useSession";
 
 export default function Page() {
   const initialized = useRef(false);
 
-  const { data: session } = useSession();
+  const session = getCookie('user-ti')
   const { id } = useParams<{ id: string }>();
   useEffect(() => {
     if (!initialized.current && session?.user.token) {
@@ -49,7 +51,7 @@ export default function Page() {
 
   const dispatch = useAppDispatch();
 
-  const { chamado: protocol, loading } = useAppSelector(
+  const { chamado: protocol, error:errorProtocol } = useAppSelector(
     (state) => state.chamadoState
   );
   const { setores } = useAppSelector((state) => state.setorState);
@@ -79,7 +81,10 @@ export default function Page() {
   const [email, setEmail] = useState<string>("");
   const [status, setStatus] = useState<string>("");
 
+  const [modal,setModal] = useState<{modal: "edit", protocol: IProtocol}>()
+
   useEffect(() => {
+
     if (origin) {
       dispatch(
         getAtendimentoOrigemID({
@@ -89,13 +94,14 @@ export default function Page() {
         })
       );
     }
-  }, [origin, dispatch, session]);
+  }, [origin, dispatch]);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    dispatch(resetLoading())
 
     const protocolForm: IProtocol = {
-      ...(protocol as IProtocol),
+      ...(protocol as IProtocol), // pega os dados ja existente e preenche
       name,
       idOrigin: Number(origin),
       idSector: Number(sector),
@@ -107,41 +113,39 @@ export default function Page() {
 
       // idSystem: Number(system),
     };
+    
 
-    dispatch(
-      putChamado({
-        chamado: protocolForm,
-        token: session?.user.token,
-        role: session?.user.role,
-      })
-    );
+    setModal({modal: "edit", protocol: protocolForm})
   };
+
 
   return (
     <div className="flex flex-col gap-10 md:gap-20">
-      <div className="bg-teclado bg-cover h-fit md:h-40">
+      <div className="bg-teclado bg-cover h-fit md:h-40  ">
+        {modal?.modal === 'edit' && modal.protocol && <ModalEdit protocol={modal.protocol} cancelModal={setModal}/>}
         <nav className="hidden md:flex justify-between bg-[#1e1e1eda] h-full text-white ">
           <IconLinkNav pathLink="/dashboard" />
           <h1 className="text-2xl md:text-4xl text-center font-semibold self-center ">
             Editar Chamado ID {protocol?.id}
           </h1>
-          <ButtonLogout path="/login-ti" />
+          <ButtonLogout type="user-ti" color="white"/>
         </nav>
         <nav className="flex flex-col md:hidden justify-between bg-[#1e1e1eda] h-full text-white ">
           <div className="flex justify-between">
             <IconLinkNav pathLink="/dashboard" />
-            <ButtonLogout path="/login-ti" />
+            <ButtonLogout type="user-ti" color="white"/>
           </div>
           <h1 className="text-2xl text-center font-semibold self-center  pb-4">
             Editar Chamado ID {protocol?.id}
           </h1>
         </nav>
       </div>
-      <div className="flex flex-col self-center font-medium gap-2 w-full">
+      <div className="flex flex-col self-center font-medium gap-2 w-full md:min-h-[68vh]">
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col self-center font-medium gap-2 w-5/6 md:w-4/6 lg:w-3/6 xl:w-2/6"
+          className="flex flex-col self-center font-medium gap-2 w-5/6 md:w-4/6 lg:w-3/6 xl:w-2/6   "
         >
+          {errorProtocol&&  <CardError title={errorProtocol }/>}
           <h2 className="text-[#848282] text-lg">Dados do Chamado</h2>
           <div className="flex flex-wrap gap-2 md:gap-6 md:flex-nowrap">
             <LabelFormOperator

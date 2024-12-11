@@ -7,6 +7,7 @@ import chamadoReducer from './slices/chamado.slice'
 import origemReducer from './slices/origem.slice';
 import statusReducer from './slices/status.slice';
 import tiposContratacoesReducer from './slices/tiposContratacoes.slice'
+import userReducer from './slices/user.slice'
 
 
 
@@ -21,6 +22,7 @@ export const makeStore = () => {
       origemState: origemReducer,
       statusState: statusReducer,
       tiposContratacoesState: tiposContratacoesReducer,
+      userState: userReducer,
     },
   })
 }

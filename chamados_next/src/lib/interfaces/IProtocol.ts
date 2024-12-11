@@ -12,17 +12,7 @@ interface IProtocol {
   idService: number;
   idSystem?: number;
   observation?:string
-  user?: {
-    name: string;
-    function: string;
-    idContractType: number;
-    idAccesses: number[];
-    accesses?: IAccess[];
-    contractType?: {
-      id: number;
-      contractType: string;
-    };
-  };
+  user?: IUser;
   sector?: {
     id: number;
     sector: string;

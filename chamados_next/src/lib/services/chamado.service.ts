@@ -37,8 +37,8 @@ const postChamado = async (chamado: IProtocol, token?: string) => {
   }
 };
 
-const putChamado = async (protocol: IProtocol, token?:string, role?: string) =>{
-  const config = requestConfig("PUT", protocol ,token,null,role);
+const putChamado = async (protocol: IProtocol, token?:string, role?: string, message?: string) =>{
+  const config = requestConfig("PUT", {form: protocol, message} ,token,null,role);
 
   try {
     const res = await fetch(`${api}/chamados/${protocol.id}`, config).then((res) =>

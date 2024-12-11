@@ -1,6 +1,7 @@
 import {
   Association,
   BelongsToManyAddAssociationsMixin,
+  BelongsToManySetAssociationsMixin,
   CreationOptional,
   DataTypes,
   ForeignKey,
@@ -21,6 +22,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
 
 
   declare addAccesses: BelongsToManyAddAssociationsMixin<Access, number>;
+  declare setAccesses: BelongsToManySetAssociationsMixin<Access, number>;
 
 
   

@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import origemService from "../services/origem.service";
 import statusService from "../services/status.service";
 
 // First, create the thunk

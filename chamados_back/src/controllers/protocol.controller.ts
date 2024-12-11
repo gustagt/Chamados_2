@@ -4,6 +4,8 @@ import ProtocolService from "../service/protocol.service";
 import Protocol from "../database/models/protocol.model";
 import IProtocol from "../interfaces/IProtocol";
 import { respE } from "../utils/resp";
+import Mail from "../smtp/config/mail"
+import { putProtocol, sucessProtocol } from "../smtp/templates/template";
 
 class ProtocolController {
   private service = new ProtocolService();
@@ -32,6 +34,14 @@ class ProtocolController {
 
       const { status, data } = await this.service.insert(form);
       res.status(status).json(data);
+     
+      if(form.email){
+        Mail.to = form.email
+        Mail.subject = `Chamados Transcon - Abertura de protocolo`
+        Mail.message = sucessProtocol(data)
+         Mail.sendMail()
+      }
+  
     } catch (error) {
       next(error);
     }
@@ -40,15 +50,25 @@ class ProtocolController {
   async put(req: Request, res: Response, next: NextFunction) {
     try {
       const { data: chamado } = await this.service.getId(req.params.id);
-      const form: IProtocol = req.body;
+      const {form , message}: {form: IProtocol, message?: string} = req.body;
+
+    
 
       if (chamado instanceof Protocol) {
         const { status, data } = await this.service.put(chamado, form);
 
         res.status(status).json(data);
+        if(form.email && form.idStatus===3){
+          Mail.to = form.email
+          Mail.subject = `Chamados Transcon - Finalização de protocolo`
+          Mail.message = putProtocol(chamado, message)
+          Mail.sendMail()
+        }
+    
       } else {
         res.status(404).json(respE("Protocolo não encontrado"));
       }
+
     } catch (error) {
       next(error);
     }
